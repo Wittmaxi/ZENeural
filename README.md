@@ -1,7 +1,7 @@
 THIS LIBRARY IS CURRENTLY WORK IN PROGRESS! 
 NOT EVERYTHING DESCRIBED IN THE README IS GUARANTEED TO WORK!
 
-ALSO, FUNCTION - NAMES MIGHT CHANGE! 
+ALSO, FUNCTION NAMES ARE SUBJECT TO CHANGE! 
 I GIVE NO GUARANTEE, THAT LATER VERSIONS ARE BACKWARDS-COMPATIBLE!
 
 # Creator of ZENeural
@@ -19,7 +19,7 @@ If you want to add everything, use
 ```
 It includes the integral package.
 
-Also, you need to àdd the compilation argument lpthread to your compiler like so:
+Also, you need to add the compilation argument lpthread to your compiler like so:
 
 ```
 g++ main.cpp -lpthreads -o out
@@ -27,12 +27,10 @@ g++ main.cpp -lpthreads -o out
 
 
 # Hardware 
-This Library works best with NVidia Graphics cards, as it uses CUDA-Optimization.
-
-However, a version for Vulcan might get created.
+This Library works best with NVidia Graphics cards, as it uses CUDA-Optimization. A Vulcan version may be released in the future.
 
 # Usage 
-The entire Library uses the Namespace "ML"
+The entire Library uses the Namespace "ML".
 
 ## Neural Network
 
