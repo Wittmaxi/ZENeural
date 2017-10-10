@@ -9,9 +9,9 @@ int main () {
   Neural myNN(true);
   myNN.createInputLayer(1); 
   myNN.addHiddenLayer(10);
+  myNN.addHiddenLayer(2, act_ramp);
   myNN.addHiddenLayer(2);
-  myNN.addHiddenLayer(2);
-  myNN.createOutputLayer(1);
+  myNN.createOutputLayer(1, act_threshact);
 
   std::cout << "creation finished" << std::endl;
 

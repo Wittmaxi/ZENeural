@@ -33,16 +33,18 @@ namespace ML {
 			d ("NN INITIALIZED");
 		}
 
-		void createInputLayer (unsigned int numberNodes = 1) {
+		void createInputLayer (unsigned int numberNodes = 1, unsigned int activation = act_identity) {
 			if (inputLayer.size() != 0) {throw std::invalid_argument("THERE IS ALREADY AN INPUT LAYER");} //if an input layer was already created
+			if (hiddenLayers.size() != 0) {throw std::invalid_argument("YOU HAVE TO FIRST CREATE THE INPUT LAYER; THEN THE HIDDEN ONES!");}
 
 			for (int i = 0; i < numberNodes; i++) {
 				inputLayer.push_back (new Node(*new std::vector<Node*>())); //since theres no last layer
 			}
+			activations.push_back(activation);
 			d ("Input layer created!");
 		}
 
-		void addHiddenLayer (unsigned int numberNodes = 1) {
+		void addHiddenLayer (unsigned int numberNodes = 1, unsigned int activation = act_identity) {
 			std::vector < Node* > temp;
 			std::vector < Node* > lastLayer;
 
@@ -56,6 +58,8 @@ namespace ML {
 				lastLayer = this->hiddenLayers.at (this->hiddenLayers.size() - 1);
 			}
 
+			activations.push_back(activation);
+
 			for (int i = 0; i < numberNodes; i++) {
 				temp.push_back (new Node(lastLayer));
 			}
@@ -65,7 +69,7 @@ namespace ML {
 			d("Added a new hidden layer!");
 		}
 
-		void createOutputLayer (unsigned int numberNodes = 1) {
+		void createOutputLayer (unsigned int numberNodes = 1, unsigned int activation = act_identity) {
 			if (outputLayer.size() != 0) {throw std::invalid_argument("THERE IS ALREADY AN OUTPUT LAYER");} //if an input layer was already created
 
 			if (hiddenLayers.size() == 0) {throw std::invalid_argument("You havent created any hidden layers!");}
@@ -75,7 +79,7 @@ namespace ML {
 			for (int i = 0; i < numberNodes; i++) {
 				outputLayer.push_back (new Node(lastLayer)); //since theres no last layer
 			}
-			
+			activations.push_back (activation);
 			d ("Output layer created!");
 		}
 
@@ -89,21 +93,26 @@ namespace ML {
 
 		std::vector <double> guess (std::vector<double> input) {
 			if (!input.size() == inputLayer.size()) {throw std::invalid_argument("MISMATCH IN NUMBER OF INPUT DATA");}
-
+			int index = 0;
 			for (int i = 0; i < inputLayer.size(); i++) {
 				inputLayer[i]->setSum (input [i]);
+				inputLayer[i]->nodeActivation(activations[index]);
 			}
+			index++;
 
 			std::vector <double> temp;
 
 			for (auto layer : hiddenLayers) {
 				for (auto item : layer) {
 					item->sumUpLastLayer();
+					item->nodeActivation(activations[index]);
 				}
+				index++;
 			}
 
 			for (auto item : outputLayer) {
 				item->sumUpLastLayer();
+				item->nodeActivation(activations[index]);
 				temp.push_back(item->getSum());
 			}
 			d("calculated the output!");
@@ -128,6 +137,7 @@ namespace ML {
 		std::vector < Node* > inputLayer;
 		std::vector < std::vector < Node* > > hiddenLayers;
 		std::vector < Node* > outputLayer;
+		std::vector < int > activations;
 	};
 }
 
