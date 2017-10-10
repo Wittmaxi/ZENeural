@@ -17,7 +17,8 @@ If you want to add everything contained by the library, use
 ```c++
 #include "pathtoIntegral.h/integral.h"
 ```
-It includes the integral package.
+It includes the entire package. However, it should only be used, when you know for certain that there is a big amount of 
+Fluid-Memory-Space (RAM) available on the users machine!
 
 Also, you need to add the compilation argument lpthread to your compiler like so:
 
