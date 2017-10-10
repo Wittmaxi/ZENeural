@@ -22,29 +22,34 @@
 
 class Node { //each perceptron
 public: 
-	Node (std::vector <Node> *_lastLayer) {
+	Node (std::vector <Node*> _lastLayer) {
 		currentSum = 0;
 		this->lastLayer = _lastLayer;
-		if (_lastLayer->size() == 0) {return;}
+		if (_lastLayer.size() == 0) {
+			this-> weights.push_back (1.0); //initialize weights as something
+			return;
+		}
 
-		for (int i = 0; i < lastLayer->size(); i++) {
+		for (int i = 0; i < lastLayer.size(); i++) {
 			this-> weights.push_back (1.0); //initialize weights as something
 		}
 	}
 
 	void sumUpLastLayer () {
-		std::cout << this->weights.size() << "  " << this->lastLayer->size() << std::endl;
-		for (int i = 0; i < lastLayer->size(); i++) {
-			float weight = 0;
+		std::cout << this->weights.size() << "  " << this->lastLayer.size() << std::endl;
+		for (int i = 0; i < lastLayer.size(); i++) {
+			double weight = 0;
 			if (i < weights.size()) {
 				weight = weights [i];
 			}
-			currentSum += lastLayer->at(i).getSum() * weight;
+			std::cout << "last layer" << lastLayer[i]->getSum() << std::endl;
+			currentSum += lastLayer[i]->getSum() * weight;
+			std::cout << "Sum: " << currentSum << std::endl;
 		}
 	}
 
 		//gods of coding, im  EXTREMELY sorry for this function. Please forgive me. 
-	int activation (const int function_id, const bool writeToOwnVal = true) { //calculates an activation function to its own sum
+	double activation (const int function_id, const bool writeToOwnVal = true) { //calculates an activation function to its own sum
 		if (function_id > 9 || function_id < 1) {throw std::invalid_argument ("Activation-function not known!");} //if the activation function doesnt exist
 		
 		int output = 0;
@@ -88,15 +93,15 @@ public:
 		return output;
 	}
 
-	void setSum (float val) {
+	void setSum (double val) {
 		currentSum = val;
 	}
 
-	float getSum () {
+	double getSum () {
 		return currentSum;
 	}
 
-    float adjustWeights (float result, float expected) {
+    double adjustWeights (double result, double expected) {
     	for (int i = 0; i < weights.size(); i++) {
     		weights [i] += ( expected - result ) * 0.25;
     	}
@@ -104,8 +109,8 @@ public:
 
 	private: 
 		float currentSum;
-		std::vector <Node> *lastLayer;
-		std::vector <float> weights;
+		std::vector <Node*> lastLayer;
+		std::vector <double> weights;
 };
 
 #endif
