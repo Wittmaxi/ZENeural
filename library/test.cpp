@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <vector>
-#include "neuralNet.h"
+#include "integral.h"
 
 using namespace ML;
 
@@ -9,9 +9,9 @@ int main () {
   Neural myNN(true);
   myNN.createInputLayer(1); 
   myNN.addHiddenLayer(10);
-  myNN.addHiddenLayer(2, act_ramp);
   myNN.addHiddenLayer(2);
-  myNN.createOutputLayer(1, act_threshact);
+  myNN.addHiddenLayer(2);
+  myNN.createOutputLayer(1);
 
   std::cout << "creation finished" << std::endl;
 
