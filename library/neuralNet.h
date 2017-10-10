@@ -25,7 +25,7 @@
 #define act_binarystep 8
 #define act_identity 9
 
-namespace NN {
+namespace ML {
 	class Neural {
 	public:
 		Neural (bool debug = false) { //initialize everything
@@ -89,7 +89,7 @@ namespace NN {
 			state = _state;
 		}
 
-		std::vector <float> calc (std::vector<float> input) {
+		std::vector <float> guess (std::vector<float> input) {
 			if (! input.size() == inputLayer.size()) {throw std::invalid_argument("MISMATCH IN NUMBER OF INPUT DATA");}
 
 
