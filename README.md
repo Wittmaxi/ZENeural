@@ -13,6 +13,18 @@ This Library doesnt need installation. Simply download the files and include the
 ```
 #include "pathToFile.h"
 ```
+If you want to add everything, use 
+```
+#include "pathtoIntegral.h/integral.h"
+```
+It includes the integral package.
+
+Also, you need to àdd the compilation argument lpthread to your compiler like so:
+
+```
+g++ main.cpp -lpthreads -o out
+```
+
 
 # Hardware 
 This Library works best with NVidia Graphics cards, as it uses CUDA-Optimization.
@@ -37,10 +49,21 @@ You need to give it an Input-Layer, hidden Layers and an Output-Layer.
 You need One Input layer, Atleast one hidden Layer, and an Output-Layer.
 
 ```
-myNN.createInputLayer (inputSize = int);
-myNN.addHiddenLayer (layerSize = int);
-myNN.createOutputLayer (outputSize = int);
+myNN.createInputLayer (inputSize = int, activation function);
+myNN.addHiddenLayer (layerSize = int, activation function);
+myNN.createOutputLayer (outputSize = int, activation function);
 ```
+Note that, the activation is optional.
+Here are the different activation functions you can use: 
+```
+act_sigmoid
+act_threshact
+act_gauss
+act_ramp
+act_binarystep
+act_identity
+```
+
 
 Now you can make the Network guess something. As input, it takes a std::vector of doubles that must be of the same size as the input layer.
 
@@ -64,7 +87,7 @@ myNN.train (input, expected);
 This class needs the following files in the same directory:
 ```
 node.h
-layer.h
+activation.h
 ```
 
 ### Real coding example
@@ -88,4 +111,28 @@ int main () {
 }
 
 
+```
+
+## Pure activation
+
+You might want to calculate the activation of a number.
+
+Therefore use ```activation ()```-function.
+it takes a double input and an activation-function-id and returns a double.
+
+To use it, include "activation.h"
+
+possible activation-ids: 
+```
+act_sigmoid
+act_threshact
+act_gauss
+act_ramp
+act_binarystep
+act_identity
+```
+
+### Example
+```
+double activated = activation (7.5, act_sigmoid);
 ```
