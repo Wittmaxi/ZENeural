@@ -13,7 +13,7 @@ This Library doesnt need installation. Simply download the files and include the
 ```c++
 #include "pathToFile.h"
 ```
-If you want to add everything, use 
+If you want to add everything contained by the library, use 
 ```c++
 #include "pathtoIntegral.h/integral.h"
 ```
