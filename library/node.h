@@ -29,12 +29,12 @@ public:
 		learningRate = 0.25;
 		this->lastLayer = _lastLayer;
 		if (_lastLayer.size() == 0) {
-			this-> weights.push_back (-100000); //initialize weights as something
+			this-> weights.push_back (1.0); //initialize weights as something
 			return;
 		}
 
 		for (int i = 0; i < lastLayer.size(); i++) {
-			this-> weights.push_back (-100000.0); //initialize weights as something
+			this-> weights.push_back (1.0); //initialize weights as something
 		}
 	}
 
