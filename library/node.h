@@ -29,21 +29,18 @@ public:
 		learningRate = 0.25;
 		this->lastLayer = _lastLayer;
 		if (_lastLayer.size() == 0) {
-			this-> weights.push_back (0.0); //initialize weights as something
+			this-> weights.push_back (-100000); //initialize weights as something
 			return;
 		}
 
 		for (int i = 0; i < lastLayer.size(); i++) {
-			this-> weights.push_back (0.0); //initialize weights as something
+			this-> weights.push_back (-100000.0); //initialize weights as something
 		}
 	}
 
 	void sumUpLastLayer () {
 		for (int i = 0; i < lastLayer.size(); i++) {
-			double weight = 0;
-			if (i < weights.size()) {
-				weight = weights [i];
-			}
+			double weight = weights [i];
 			currentSum += lastLayer[i]->getSum() * weight;
 		}
 	}
@@ -70,18 +67,17 @@ public:
 		return currentSum;
 	}
 
-    void adjustWeights (double error) {
-    	for (int i = 0; i < weights.size(); i++) {
-    		weights [i] += error * learningRate;
-    		std::cout << weights [i] << std::endl;
-    	}
-    }
+	void adjustWeights (double error) {
+		for (int i = 0; i < weights.size(); i++) {
+			weights [i] += error * learningRate;
+		}
+	}
 
-	private: 
-		double learningRate;
-		double currentSum;
-		std::vector <Node*> lastLayer;
-		std::vector <double> weights;
+private: 
+	double learningRate;
+	double currentSum;
+	std::vector <Node*> lastLayer;
+	std::vector <double> weights;
 };
 }
 #endif

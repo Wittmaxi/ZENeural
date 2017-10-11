@@ -40,6 +40,8 @@ namespace ML {
 			for (int i = 0; i < numberNodes; i++) {
 				inputLayer.push_back (new Node(*new std::vector<Node*>())); //since theres no last layer
 			}
+			inputLayer.push_back(new Node(*new std::vector<Node*>()));
+			inputLayer[inputLayer.size()-1]->setSum(1);
 			activations.push_back(activation);
 			d ("Input layer created!");
 		}
@@ -61,6 +63,8 @@ namespace ML {
 			for (int i = 0; i < numberNodes; i++) {
 				temp.push_back (new Node(lastLayer));
 			}
+			temp.push_back (new Node (lastLayer));
+			temp[temp.size()-1]->setSum (1);
 
 			hiddenLayers.push_back(temp);
 
@@ -128,11 +132,15 @@ namespace ML {
 				error.push_back (expected[i] - lastGuess[i]);
 			}
 
+			for (auto i : error) {
+				std::cout << i << std::endl;
+			}
+
 			for (auto i : hiddenLayers) {
-				int index = 0;
 				for (auto j : i) {
-					j->adjustWeights (error[index]);
-					index ++;
+					for (auto err : error) {
+						j->adjustWeights (err);
+					}
 				}
 			}
 		}
