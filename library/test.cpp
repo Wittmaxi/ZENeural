@@ -14,10 +14,10 @@ int main () {
   Neural myNN(false);
 
   myNN.createInputLayer(1); 
-  myNN.addHiddenLayer(30, act_sigmoid);
-  myNN.createOutputLayer(2, act_ramp);
+  myNN.addHiddenLayer(30);
+  myNN.createOutputLayer(1);
 
-  myNN.setLearningRate(1);
+  myNN.setLearningRate(0.1);
 
   std::cout << "creation finished" << std::endl;
 
@@ -25,9 +25,18 @@ int main () {
   input.push_back (2.0);
   std::vector < double > output;
   std::vector < double > expected;
+
+  std::cin >> input[0]; 
+
+  output = myNN.guess (input);
+
+  for (auto i : output) {
+    std::cout << i << std::endl;
+  }
+
   expected.push_back(0.0);
-  expected.push_back(0.0);
-  for (int i = 0; i < 100000; i++) { //training over 200 iterations
+
+  for (int i = 0; i < 1; i++) { //training over 200 iterations
     srand (i * 10);
 
     input [0] = rand() % 10000 + 1;
@@ -37,10 +46,8 @@ int main () {
 
     if (int(floor(input [0])) % 2 == 0) {
       expected[0] = 1;
-      expected[1] = 0;
     } else {
       expected[0] = 0;
-      expected[1] = 1;
     }    
     myNN.train (input, expected);
   }
@@ -48,10 +55,11 @@ int main () {
 
   for (int i = 0; i < 10; i++) {
     std::cin >> input [0];
+    std::cout << input [0] << std::endl;
     output.clear();
     output = myNN.guess(input);
     for (double i : output) {
-      std::cout << activation (i, act_threshact) << std::endl; 
+      std::cout << i << std::endl; 
     }
   }
 }

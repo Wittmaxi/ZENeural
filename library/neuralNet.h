@@ -125,7 +125,7 @@ namespace ML {
 			std::vector <double> lastGuess = guess (input);
 			std::vector <double> error;
 			for (int i = 0; i < expected.size(); i++) {
-				error.push_back (expected[i] + lastGuess[i]);
+				error.push_back (expected[i] - lastGuess[i]);
 			}
 
 			for (auto i : hiddenLayers) {
