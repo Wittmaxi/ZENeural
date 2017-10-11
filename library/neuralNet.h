@@ -15,7 +15,7 @@
 #define state_calc_only 2
 
 //define needed constants too long to paste in code
-#define CONST_PI 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127324587006606315588174881520920962829254091715364367892590360011330530548820466521384146951941511609
+#define CONST_PI 3.141592653589
 #define CONST_E 2.718281828459
 
 #define act_sigmoid 1
@@ -49,8 +49,6 @@ namespace ML {
 			std::vector < Node* > lastLayer;
 
 			if (outputLayer.size() != 0 || inputLayer.size() == 0) {throw std::invalid_argument("LAYERING PROBLEM!");}
-
-			std::cout << hiddenLayers.size() << std::endl;
 
 			if (hiddenLayers.size() == 0) {
 				lastLayer = inputLayer;
@@ -92,6 +90,8 @@ namespace ML {
 		}
 
 		std::vector <double> guess (std::vector<double> input) {
+			d ("Neural Network is currently calculating a guess!");
+
 			if (!input.size() == inputLayer.size()) {throw std::invalid_argument("MISMATCH IN NUMBER OF INPUT DATA");}
 			int index = 0;
 			for (int i = 0; i < inputLayer.size(); i++) {
@@ -100,7 +100,7 @@ namespace ML {
 			}
 			index++;
 
-			std::vector <double> temp;
+			std::vector <double> output;
 
 			for (auto layer : hiddenLayers) {
 				for (auto item : layer) {
@@ -113,15 +113,44 @@ namespace ML {
 			for (auto item : outputLayer) {
 				item->sumUpLastLayer();
 				item->nodeActivation(activations[index]);
-				temp.push_back(item->getSum());
+				output.push_back(item->getSum());
 			}
 			d("calculated the output!");
-			return temp;
+			return output;
 		}
 
-		void train (std::vector <float> input, std::vector<float> expected) { //adjusts the weights
+		void train (std::vector <double> input, std::vector<double> expected) { //adjusts the weights
 			if (expected.size() != outputLayer.size()) {throw std::invalid_argument("WRONG NUMBER OF EXCPECTED VALUES!");}
 		
+			std::vector <double> lastGuess = guess (input);
+			std::vector <double> error;
+			for (int i = 0; i < expected.size(); i++) {
+				error.push_back (expected[i] + lastGuess[i]);
+			}
+
+			for (auto i : hiddenLayers) {
+				int index = 0;
+				for (auto j : i) {
+					j->adjustWeights (error[index]);
+					index ++;
+				}
+			}
+		}
+
+		void setLearningRate (double lr) {
+			for (auto i : inputLayer) {
+				i->setLearningRate (lr);
+			}
+
+			for (auto i : outputLayer) {
+				i->setLearningRate (lr);
+			}
+
+			for (auto i : hiddenLayers) {
+				for (auto j : i) {
+					j->setLearningRate (lr);
+				}
+			}
 		}
 
 	private:
