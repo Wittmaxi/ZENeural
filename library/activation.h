@@ -8,17 +8,16 @@
 #include <stdexcept>
 #include <cmath>
 
-
 #define act_sigmoid 1
 #define act_threshact 2
 #define act_gauss 3
-#define act_ramp 7
-#define act_binarystep 8
-#define act_identity 9
+#define act_ramp 4
+#define act_binarystep 5
+#define act_identity 6
 
 namespace ML {
 	double activation (double input, unsigned int function_id) {
-		if (function_id > 9 || function_id < 1) {throw std::invalid_argument ("Activation-function not known!");} //if the activation function doesnt exist
+		if (function_id > 6 || function_id < 1) {throw std::invalid_argument ("Activation-function not known!");} //if the activation function doesnt exist
 		
 		int output = 0;
 		
@@ -26,7 +25,7 @@ namespace ML {
 		
 		if (function_id == act_threshact) { //the threshold-activation function
 			if (input < 0) {
-				output = -1;
+				output = 0;
 			} else {
 				output = 1;
 			}

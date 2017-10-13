@@ -17,9 +17,9 @@
 #define act_sigmoid 1
 #define act_threshact 2
 #define act_gauss 3
-#define act_ramp 7
-#define act_binarystep 8
-#define act_identity 9
+#define act_ramp 4
+#define act_binarystep 5
+#define act_identity 6
 
 namespace ML {
 class Node { //each perceptron
@@ -29,20 +29,22 @@ public:
 		learningRate = 0.25;
 		this->lastLayer = _lastLayer;
 		if (_lastLayer.size() == 0) {
-			this-> weights.push_back (1.0); //initialize weights as something
+			this-> weights.push_back (0.3); //initialize weights as something
 			return;
 		}
 
 		for (int i = 0; i < lastLayer.size(); i++) {
-			this-> weights.push_back (1.0); //initialize weights as something
+			this-> weights.push_back (0.3); //initialize weights as something
 		}
 	}
 
 	void sumUpLastLayer () {
-		for (int i = 0; i < lastLayer.size(); i++) {
+		currentSum = 0;
+		for (int i = 0; i < weights.size(); i++) {
 			double weight = weights [i];
 			currentSum += lastLayer[i]->getSum() * weight;
 		}
+		rawSum = currentSum;
 	}
 
 	void setLearningRate (double lr) {
@@ -61,21 +63,39 @@ public:
 
 	void setSum (double val) {
 		currentSum = val;
+		rawSum = val;
+	}
+
+	double getRawSum() {
+		return rawSum;
 	}
 
 	double getSum () {
 		return currentSum;
 	}
 
-	void adjustWeights (double error) {
-		for (int i = 0; i < weights.size(); i++) {
-			weights [i] += error * learningRate;
+	void adjustWeights () {
+		double diff = (1.0 + rawSum) * (1.0 - rawSum) *error * learningRate;
+
+		for (int i = 0; i < lastLayer.size(); i++) {
+			lastLayer[i]->addError (weights[i] * error);
+			weights [i] += lastLayer[i]->getRawSum() * diff;
 		}
+	}
+
+	void setError ( double _error ){
+		error = _error;
+	}
+
+	void addError ( double _error ) {
+		error += _error;
 	}
 
 private: 
 	double learningRate;
 	double currentSum;
+	double rawSum;
+	double error;
 	std::vector <Node*> lastLayer;
 	std::vector <double> weights;
 };

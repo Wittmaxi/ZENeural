@@ -21,9 +21,9 @@
 #define act_sigmoid 1
 #define act_threshact 2
 #define act_gauss 3
-#define act_ramp 7
-#define act_binarystep 8
-#define act_identity 9
+#define act_ramp 4
+#define act_binarystep 5
+#define act_identity 6
 
 namespace ML {
 	class Neural {
@@ -64,7 +64,7 @@ namespace ML {
 				temp.push_back (new Node(lastLayer));
 			}
 			temp.push_back (new Node (lastLayer));
-			temp[temp.size()-1]->setSum (1);
+			temp[temp.size()-1]->setSum (1.0);
 
 			hiddenLayers.push_back(temp);
 
@@ -126,39 +126,49 @@ namespace ML {
 		void train (std::vector <double> input, std::vector<double> expected) { //adjusts the weights
 			if (expected.size() != outputLayer.size()) {throw std::invalid_argument("WRONG NUMBER OF EXCPECTED VALUES!");}
 		
-			std::vector <double> lastGuess = guess (input);
-			std::vector <double> error;
-			for (int i = 0; i < expected.size(); i++) {
-				error.push_back (expected[i] - lastGuess[i]);
-			}
+			std::vector < double > output = guess(input);
 
-			for (auto i : error) {
-				std::cout << i << std::endl;
-			}
+			d("guessed something");
 
-			for (auto i : hiddenLayers) {
-				for (auto j : i) {
-					for (auto err : error) {
-						j->adjustWeights (err);
-					}
+			for (int i = 0; i < output.size(); i++) {
+				outputLayer[i]->setError(expected[i] - output[i]);
+			}
+			d("assigned errors");
+
+			d("all went well!");
+			for (auto i : outputLayer) {
+				i->adjustWeights();
+			}
+			for (int i = hiddenLayers.size() -1; i > 0; i--) {
+				for (auto j: hiddenLayers [i]) {
+					j->adjustWeights();
 				}
+			}
+			for (auto i : inputLayer) {
+				i->adjustWeights();
 			}
 		}
 
 		void setLearningRate (double lr) {
+
 			for (auto i : inputLayer) {
 				i->setLearningRate (lr);
 			}
+			
+			int totalRate = lr;
 
-			for (auto i : outputLayer) {
-				i->setLearningRate (lr);
-			}
 
 			for (auto i : hiddenLayers) {
+				totalRate *= lr / 2;
 				for (auto j : i) {
-					j->setLearningRate (lr);
+					j->setLearningRate (totalRate);
 				}
 			}
+
+			for (auto i : outputLayer) {
+				i->setLearningRate (totalRate);
+			}
+
 		}
 
 	private:
