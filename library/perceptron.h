@@ -1,7 +1,0 @@
-
-
-namespace ML {
-class Perceptron {
-
-};
-}
