@@ -19,7 +19,7 @@ void CNode::setError (double err) {
 	error += err;
 }
 
-void CNode::calcWSum (std::vector<double> lastLayerSums) {
+void CNode::calcWSum (std::vector<double>& lastLayerSums) {
 	double tempVal = 0.0;
 	for (int i = 0; i < weights.size(); i++) {
 		tempVal += lastLayerSums[i] * weights[i];

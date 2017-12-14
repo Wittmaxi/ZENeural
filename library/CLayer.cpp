@@ -11,13 +11,13 @@ CLayer::CLayer (unsigned int layerSize, unsigned int lastLayerSize) {
 	}
 }
 
-void CLayer::setSums (std::vector<double> sums) {
+void CLayer::setSums (std::vector<double>& sums) {
 	for (int i = 0; i < sums.size(); i++) {
 		Nodes[i]->setSum (sums[i]);
 	}
 }
 
-void CLayer::setErrors (std::vector<double> errors) {
+void CLayer::setErrors (std::vector<double>& errors) {
 	for (int i = 0; i < errors.size(); i++) {
 		Nodes[i]->setError (errors[i]);
 	}		
@@ -27,7 +27,7 @@ void CLayer::setError (double error, unsigned int index) {
 	Nodes[index]->setError (error);
 }
 
-void CLayer::calcWSums (std::vector<double> lastLayerSums) {
+void CLayer::calcWSums (std::vector<double>& lastLayerSums) {
 	for (int i = 0; i < Nodes.size(); i++) {
 		Nodes[i]->calcWSum (lastLayerSums);
 	}
@@ -41,7 +41,7 @@ std::vector<double> CLayer::getSums() {
 	return sums;
 }
 
-void CLayer::backPropagate(std::vector<CLayer*> layers) {
+void CLayer::backPropagate(std::vector<CLayer*>& layers) {
 	for (int i = layers.size()-1; i > 1; i--) {
 		for (int j = 0; j < layers[i]->size(); j++) {
 			Nodes[j]-> adjustWeights(*layers[i-1]);

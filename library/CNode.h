@@ -8,7 +8,7 @@ public:
 	double getSum ();
 	void setSum (double sum);
 	void setError (double err);
-	void calcWSum (std::vector<double> lastLayerSums);
+	void calcWSum (std::vector<double>& lastLayerSums);
 	void adjustWeights (CLayer lastLayer);
 private:
 	std::vector<double> weights;

@@ -7,12 +7,12 @@ class CNode;
 class CLayer {
 public:
 	CLayer (unsigned int layerSize, unsigned int lastLayerSize);
-	void setSums (std::vector<double> sums);
-	void setErrors (std::vector<double> errors);
+	void setSums (std::vector<double>& sums);
+	void setErrors (std::vector<double>& errors);
 	void setError (double error, unsigned int index);
-	void calcWSums (std::vector<double> lastLayerSums);
+	void calcWSums (std::vector<double>& lastLayerSums);
 	std::vector<double> getSums();
-	void backPropagate(std::vector<CLayer*> layers);
+	void backPropagate(std::vector<CLayer*>& layers);
 	int size();
 private:
 	std::vector<CNode*> Nodes;

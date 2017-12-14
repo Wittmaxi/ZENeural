@@ -10,15 +10,16 @@ void CNeural::addLayer (unsigned int layerSize) {
 	}
 }  
 
-std::vector<double> CNeural::guess (const std::vector <double>& input) {
+std::vector<double> CNeural::guess (std::vector <double>& input) {
 	Layers[0]->setSums (input);
 	for (int i = 1; i < Layers.size(); i++) { //w-Sum for all except the first layer, since it already contains the values
-		Layers[i]->calcWSums (Layers[i-1]->getSums()); //calculate the wheighted sum with the values of the last Layer
+		std::vector<double> sums = Layers[i-1]->getSums();
+		Layers[i]->calcWSums (sums); //calculate the wheighted sum with the values of the last Layer
 	}
 	return Layers[Layers.size()-1]->getSums();
 }
 
-std::vector<double> CNeural::adjust (const std::vector<double>& input,const std::vector<double>& correct) {
+std::vector<double> CNeural::adjust (std::vector<double>& input,std::vector<double>& correct) {
 	std::vector<double> guesses = guess (input);
 	std::vector<double> errors;
 	std::cout << "guessed" << std::endl;
