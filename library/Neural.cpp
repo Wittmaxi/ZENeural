@@ -33,4 +33,14 @@ std::vector<double> CNeural::adjust (std::vector<double>& input,std::vector<doub
 	std::cout << "set errors" << std::endl;
  	Layers[lastLayer]->backPropagate(Layers);
 }
+
+int CNeural::numbLayers() {
+	return Layers.size();
 }
+std::vector<CLayer*> CNeural::getRawLayers() {
+	return Layers;
+}
+
+}
+
+

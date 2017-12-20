@@ -2,11 +2,13 @@
 #include "CNode.h"
 #include <iostream>
 
+
+
 CLayer::CLayer (unsigned int layerSize, unsigned int lastLayerSize) {
 	if (layerSize == 0) {
 		return;
 	}
-	for (int i = 0; i < layerSize-1; i++) {
+	for (int i = 0; i < layerSize; i++) {
 		Nodes.push_back (new CNode(lastLayerSize));
 	}
 }
@@ -54,3 +56,8 @@ int CLayer::size () {
 	return Nodes.size();
 	std::cout << "got the size" << std::endl;
 }
+
+std::vector<CNode*> CLayer::getRawNodes() {
+	return Nodes;
+}
+

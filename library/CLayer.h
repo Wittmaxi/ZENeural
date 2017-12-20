@@ -14,6 +14,7 @@ public:
 	std::vector<double> getSums();
 	void backPropagate(std::vector<CLayer*>& layers);
 	int size();
+	std::vector<CNode*> getRawNodes();
 private:
 	std::vector<CNode*> Nodes;
 };
