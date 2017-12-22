@@ -3,10 +3,11 @@
 
 namespace ML {
 	class CLayer {
-	public: 
+	public:
 		CLayer(int size, CLayer* lastLayer);
 		CLayer(int size);
-		std::vector <CNeuron*> getRawNeurons ();
+		void setSums (std::vector<double>& sums);
+		std::vector <CNeuron*>& getRawNeurons ();
 		int size();
 	private:
 		CLayer* m_lastLayer;

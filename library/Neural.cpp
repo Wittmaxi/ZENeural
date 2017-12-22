@@ -16,4 +16,11 @@ void Neural::addLayer(int size) {
 std::vector<CLayer*>& Neural::getRawLayers() {
 	return m_layers;
 }
+
+std::vector<double> Neural::guess(std::vector<double> input) {
+	std::vector<double> returnVec;
+
+
+	return returnVec;
+}
 }
