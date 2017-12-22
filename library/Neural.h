@@ -1,19 +1,13 @@
-#pragma once
-
 #include <vector>
 #include "CLayer.h"
 
 namespace ML {
-
-class CNeural {
+class Neural {
 public:
-	void addLayer (unsigned int layerSize);
-	std::vector<double> guess (std::vector <double>& input);
-	std::vector<double> adjust (std::vector<double>& input, std::vector<double>& correct);
-	//for unit testing. lol
-	std::vector<CLayer*> getRawLayers();
-	int numbLayers();
+	Neural ();
+	void addLayer(int size);
+	std::vector<CLayer*>& getRawLayers();
 private:
-	std::vector<CLayer*> Layers;
+	std::vector <CLayer*> m_layers; //void* needs to be replaced by CLayer
 };
 }

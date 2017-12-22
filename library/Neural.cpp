@@ -1,46 +1,19 @@
 #include "Neural.h"
-#include <iostream>
 
 namespace ML {
-void CNeural::addLayer (unsigned int layerSize) {
-	if (Layers.size() == 0) {
-		Layers.push_back (new CLayer (layerSize, 0));
+Neural::Neural () {
+
+}
+
+void Neural::addLayer(int size) {
+	if (m_layers.size() == 0) {
+		m_layers.push_back (new CLayer (size));
 	} else {
-		Layers.push_back (new CLayer (layerSize, Layers[Layers.size()-1]->size()));
+		m_layers.push_back (new CLayer(size, m_layers[m_layers.size()-2]));
 	}
-}  
-
-std::vector<double> CNeural::guess (std::vector <double>& input) {
-	Layers[0]->setSums (input);
-	for (int i = 1; i < Layers.size(); i++) { //w-Sum for all except the first layer, since it already contains the values
-		std::vector<double> sums = Layers[i-1]->getSums();
-		Layers[i]->calcWSums (sums); //calculate the wheighted sum with the values of the last Layer
-	}
-	return Layers[Layers.size()-1]->getSums();
 }
 
-std::vector<double> CNeural::adjust (std::vector<double>& input,std::vector<double>& correct) {
-	std::vector<double> guesses = guess (input);
-	std::vector<double> errors;
-	std::cout << "guessed" << std::endl;
-	//calculate the errors
-	for (int i = 0; i < guesses.size(); i ++) {
-		errors.push_back (correct[i] - guesses[i]);
-	}
-	int lastLayer = Layers.size()-1;
-	std::cout << "errors fixed" << std::endl;
-	Layers[lastLayer]->setErrors (errors);
-	std::cout << "set errors" << std::endl;
- 	Layers[lastLayer]->backPropagate(Layers);
+std::vector<CLayer*>& Neural::getRawLayers() {
+	return m_layers;
 }
-
-int CNeural::numbLayers() {
-	return Layers.size();
 }
-std::vector<CLayer*> CNeural::getRawLayers() {
-	return Layers;
-}
-
-}
-
-
