@@ -44,9 +44,9 @@ std::vector<double> CLayer::getSums() {
 }
 
 void CLayer::backPropagate(std::vector<CLayer*>& layers) {
-	for (int i = layers.size()-1; i > 1; i--) {
+	for (int i = layers.size(); i >= 1; i--) {
 		for (int j = 0; j < layers[i]->size(); j++) {
-			Nodes[j]-> adjustWeights(*layers[i-1]);
+			Nodes[j]-> adjustWeights(layers[i]);
 		}
 	}
 }

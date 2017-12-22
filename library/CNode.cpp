@@ -27,10 +27,12 @@ void CNode::calcWSum (std::vector<double>& lastLayerSums) {
 	val = tempVal;
 }
 
-void CNode::adjustWeights (CLayer lastLayer) {
+void CNode::adjustWeights (CLayer* lastLayer) {
 	std::cout << "adjusting weights" << std::endl;
-	for (int i = 0; i < lastLayer.size(); i++) {
-		lastLayer.setError (error * weights[i], i);
+	std::vector<CNode*> lln = lastLayer->getRawNodes();
+	std::cout << "got ll nodes" << std::endl;
+	for (int i = 0; i < lln.size(); i++) {
+		lastLayer->setError (error * weights[i], i);
 	}
 	for (int i = 0; i < weights.size(); i ++) {
 		weights[i] += error * 0.25;

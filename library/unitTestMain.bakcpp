@@ -20,6 +20,7 @@ TEST_CASE("Neural Network", "[NN]") {
 	SECTION ("RAW LAYERS") {
 		std::vector <CLayer*> layersTest;
 		layersTest = tnn.getRawLayers();
+		REQUIRE(layersTest[0]->size() == 2);
 		std::vector<CNode*> nodesTest;
 		SECTION ("RAW NODES") {
 			nodesTest = layersTest[0]->getRawNodes();
@@ -32,6 +33,20 @@ TEST_CASE("Neural Network", "[NN]") {
 		SECTION ("SIZE") {
 			REQUIRE (tnn.numbLayers() == 3);
 			REQUIRE ((tnn.guess(testvec)).size() == 2);
+		}
+		SECTION ("GUESS") {
+			tnn.guess(testvec);
+			REQUIRE (layersTest[0]->size());
+		}
+		SECTION ("NODE OPERATIONS") {
+			nodesTest[0]->adjustWeights (layersTest[1]);
+		}
+		SECTION ("LAYER OPERATIONS") {
+			layersTest[0]->setErrors (testvec);
+			layersTest[1]->backPropagate (layersTest);
+		}
+		SECTION ("adjust") {
+			tnn.adjust (testvec, testvec);
 		}
 	}
 }
