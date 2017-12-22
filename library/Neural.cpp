@@ -9,7 +9,7 @@ void Neural::addLayer(int size) {
 	if (m_layers.size() == 0) {
 		m_layers.push_back (new CLayer (size));
 	} else {
-		m_layers.push_back (new CLayer(size, m_layers[m_layers.size()-2]));
+		m_layers.push_back (new CLayer(size, m_layers[m_layers.size()-1]));
 	}
 }
 
