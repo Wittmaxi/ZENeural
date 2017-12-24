@@ -8,6 +8,10 @@ namespace ML {
 		CLayer(int size);
 		void setSums (std::vector<double>& sums);
 		std::vector <CNeuron*>& getRawNeurons ();
+		CLayer* getLastLayer();
+		std::vector <double> getLayerValues ();
+		std::vector<double> getErrors();
+		void wSum ();
 		int size();
 	private:
 		CLayer* m_lastLayer;

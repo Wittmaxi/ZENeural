@@ -5,8 +5,10 @@ namespace ML {
 	public:
 		CNeuron (int numberWeights);
 		std::vector<double>& getRawWeights ();
+		void wSum (std::vector<double> lastLayerValues);
 		double getValue ();
 		void setValue (double value);
+		double getError();
 	private:
 		std::vector<double> m_weights;
 		double m_value;

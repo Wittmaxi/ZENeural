@@ -18,9 +18,14 @@ std::vector<CLayer*>& Neural::getRawLayers() {
 }
 
 std::vector<double> Neural::guess(std::vector<double> input) {
-	std::vector<double> returnVec;
+	m_layers[0]->setSums(input);
+	for (int i = 1; i < m_layers.size(); i++) {
+		m_layers[i]->wSum();
+	}
+	return m_layers[m_layers.size()-1]->getLayerValues();
+}
 
-
-	return returnVec;
+void Neural::adjust (std::vector<double> input, std::vector<double> expected) {
+	
 }
 }

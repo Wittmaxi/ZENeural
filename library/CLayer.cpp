@@ -27,7 +27,32 @@ namespace ML {
 		}
 	}
 
+	void CLayer::wSum () {
+		for (int i = 1; i < m_neurons.size (); i++) {
+			m_neurons[i]->wSum (m_lastLayer->getLayerValues());
+		}
+	}
+
+	std::vector<double> CLayer::getLayerValues () {
+		std::vector<double> values;
+		for (int i = 0; i < m_neurons.size(); i++) {
+			values.push_back (m_neurons[i]->getValue());
+		}
+		return values;
+	}
+
 	int CLayer::size () {
 		return m_neurons.size();
+	}
+
+	CLayer* CLayer::getLastLayer() {
+		return m_lastLayer;
+	}
+
+	std::vector<double> CLayer::getErrors () {
+		std::vector<double> retvec;
+		for (auto i : m_neurons) {
+			retvec.push_back(i -> getError());
+		}
 	}
 }
