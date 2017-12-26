@@ -28,8 +28,9 @@ namespace ML {
 	}
 
 	void CLayer::wSum () {
-		for (int i = 1; i < m_neurons.size (); i++) {
-			m_neurons[i]->wSum (m_lastLayer->getLayerValues());
+		std::vector<double> llval = m_lastLayer->getLayerValues();
+		for (int i = 0; i < m_neurons.size (); i++) {
+			m_neurons[i]->wSum (llval);
 		}
 	}
 
@@ -53,6 +54,28 @@ namespace ML {
 		std::vector<double> retvec;
 		for (auto i : m_neurons) {
 			retvec.push_back(i -> getError());
+		}
+	}
+
+	void CLayer::setErrors (std::vector<double> errors){
+		for (int i = 0; i < m_neurons.size(); i++){
+			m_neurons[i]->setError (errors[i]);
+		}
+	}
+
+	void CLayer::addErrors (std::vector<double> errors){
+		for (int i = 0; i < m_neurons.size(); i++){
+			m_neurons[i]->addError (errors[i]);
+		}
+	}
+
+	void CLayer::backpropagate () {
+		if (m_lastLayer != nullptr) {
+			for (auto i : m_neurons) {
+				i->adjustWeights();
+				m_lastLayer->addErrors(i->backpropagate());
+			}
+			m_lastLayer->backpropagate();
 		}
 	}
 }

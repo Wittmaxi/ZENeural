@@ -29,6 +29,8 @@ TEST_CASE("EVERY FUNCTION OF MY NN", "please dont you dare to fail on me.") {
 		REQUIRE (layers[1]->getLastLayer()->size() == 2);
 		REQUIRE (layers[1]->getLayerValues().size() == 2);
 		REQUIRE (layers[1]->getLayerValues()[0] == 0.0);
+		layers[1]->setSums (testvec);
+		REQUIRE (layers[1]->getLayerValues() == testvec);
 	}
 	SECTION ("RAW NODES") {
 		REQUIRE (neurons.size() == 2);
@@ -36,11 +38,16 @@ TEST_CASE("EVERY FUNCTION OF MY NN", "please dont you dare to fail on me.") {
 		REQUIRE (neurons[1]->getValue () == 0.0);
 		layers[0]->setSums (testvec);
 		REQUIRE (layers[0]->getRawNeurons()[0]->getValue () == 1.0);
+		neurons[0]->setError (2.0);
+		REQUIRE (neurons[0]->getError() == 2.0);
 	}
 	SECTION ("GUESSING"){
 			REQUIRE (testNN.guess(testvec).size() == 2);
+			REQUIRE (testNN.guess(testvec)[0] != 0);
 	}
 	SECTION ("ADJUSTING") {
+		REQUIRE (testNN.calcErrors(testvec, testvec)[0] == 0);
+		std::cout << "clcerr" << std::endl;
 		for (int i = 0; i < 100; i++) {
 			testNN.adjust (testNN.guess (testvec), testvec);
 		}

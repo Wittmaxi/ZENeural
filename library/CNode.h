@@ -1,4 +1,5 @@
 #include <vector>
+#pragma once
 
 namespace ML {
 	class CNeuron {
@@ -9,6 +10,10 @@ namespace ML {
 		double getValue ();
 		void setValue (double value);
 		double getError();
+		void setError (double error);
+		void addError (double error);
+		void adjustWeights();
+		std::vector<double> backpropagate();
 	private:
 		std::vector<double> m_weights;
 		double m_value;
