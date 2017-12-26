@@ -1,4 +1,7 @@
-testmake:
+libmake:
+	
+
+test:
 	g++ *.cpp -o test
 	./test
 
