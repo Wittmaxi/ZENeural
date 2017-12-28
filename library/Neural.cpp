@@ -1,4 +1,4 @@
-#include "Neural.h"
+#include "zeneural/Neural.h"
 #include <iostream>
 
 namespace ML {

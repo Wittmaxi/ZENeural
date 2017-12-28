@@ -1,5 +1,5 @@
-#include "CNode.h"
-#include "CLayer.h"
+#include "zeneural/CNode.h"
+#include "zeneural/CLayer.h"
 #include <cmath>
 #include <iostream>
 

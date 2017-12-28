@@ -1,4 +1,4 @@
-#include "CLayer.h"
+#include "zeneural/CLayer.h"
 #include <iostream>
 
 namespace ML {
