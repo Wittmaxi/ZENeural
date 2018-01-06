@@ -16,7 +16,7 @@ uninstall:
 				sudo rm -rf /usr/local/include/zeneural/
 
 test:
-				g++ test.cpp CLayer.cpp CNode.cpp Neural.cpp -o test
+				g++ *.cpp -Wall -o test
 				./test
 
 clean:

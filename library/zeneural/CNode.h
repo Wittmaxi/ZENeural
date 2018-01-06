@@ -14,7 +14,7 @@ namespace ML {
 		void addError (double error);
 		void adjustWeights();
 		std::vector<double> backpropagate();
-		double fermi (double input); 
+		double sigmoid (double input); 
 	private:
 		std::vector<double> m_weights;
 		double m_value;

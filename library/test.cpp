@@ -3,7 +3,7 @@
 #include "catch.hpp"
 #include <vector>
 #include <iostream>
-#include "Neural.h"
+#include "zeneural/Neural.h"
 #include <cmath>
 
 using namespace ML;
@@ -11,9 +11,12 @@ using namespace ML;
 TEST_CASE("EVERY FUNCTION OF MY NN", "please dont you dare to fail on me.") {
 	Neural testNN;
 	std::vector <double> testvec;
+	std::vector <double> testvals;
 	std::vector <CLayer*> layers;
 	std::vector <CNeuron*> neurons;
 
+	testvals.push_back (0.5);
+	testvals.push_back (exp(1));
 	testvec.push_back (1.0);
 	testvec.push_back (2.0);
 
@@ -40,6 +43,7 @@ TEST_CASE("EVERY FUNCTION OF MY NN", "please dont you dare to fail on me.") {
 		REQUIRE (layers[0]->getRawNeurons()[0]->getValue () == 1.0);
 		neurons[0]->setError (2.0);
 		REQUIRE (neurons[0]->getError() == 2.0);
+		REQUIRE (neurons[0]->sigmoid (0) == 0.5);
 	}
 	SECTION ("GUESSING"){
 			REQUIRE (testNN.guess(testvec).size() == 2);
@@ -48,9 +52,10 @@ TEST_CASE("EVERY FUNCTION OF MY NN", "please dont you dare to fail on me.") {
 	SECTION ("ADJUSTING") {
 		REQUIRE (testNN.calcErrors(testvec, testvec)[0] == 0);
 		std::cout << "clcerr" << std::endl;
-		for (int i = 0; i < 10; i++) {
-			testNN.adjust (testNN.guess (testvec), testvec);
+		for (int i = 0; i < 1000; i++) {
+			testNN.adjust (testvec, testvals);
 		}
-		REQUIRE (round(testNN.guess(testvec)[0]) == 1); //see if an improvement occured
+		REQUIRE (testNN.guess(testvec)[0] == testvals[0]); //see if an improvement occured
+		REQUIRE (testNN.guess(testvec)[1] == testvals[1]);
 	}
 }
