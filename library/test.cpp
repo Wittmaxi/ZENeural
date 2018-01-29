@@ -1,61 +1,34 @@
-#define CATCH_CONFIG_MAIN
-
-#include "catch.hpp"
 #include <vector>
-#include <iostream>
-#include "zeneural/Neural.h"
-#include <cmath>
+
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
+
+#include "CNeuron.h"
+#include "CLayer.h"
 
 using namespace ML;
 
-TEST_CASE("EVERY FUNCTION OF MY NN", "please dont you dare to fail on me.") {
-	Neural testNN;
-	std::vector <double> testvec;
-	std::vector <double> testvals;
-	std::vector <CLayer*> layers;
-	std::vector <CNeuron*> neurons;
+TEST_CASE ("NEURON", ".") {
+	CNeuron testNeuron(3);
+	std::vector<double> testVec {1.0f, 3.4f, 0.5f};
+	SECTION ("CONSTR") {
+		REQUIRE (testNeuron.m_weights.size() == 3);
+	}
+	SECTION ("FORWARD SUM") {
+		REQUIRE (testNeuron.forwardSum (testVec) > 0);
+	}
+}
 
-	testvals.push_back (0.5);
-	testvals.push_back (exp(1));
-	testvec.push_back (1.0);
-	testvec.push_back (2.0);
-
-	testNN.addLayer(2); //add a layer of size 2
-	testNN.addLayer(2);
-	testNN.addLayer(2);
-	layers = testNN.getRawLayers();
-	neurons = layers[1]->getRawNeurons();
-	SECTION ("RAW LAYERS") {
-		REQUIRE (layers.size() == 3);
-		REQUIRE (layers[0]->size() == 2);
-		REQUIRE (layers[1]->size() == 2);
-		REQUIRE (layers[1]->getLastLayer()->size() == 2);
-		REQUIRE (layers[1]->getLayerValues().size() == 2);
-		REQUIRE (layers[1]->getLayerValues()[0] == 0.0);
-		layers[1]->setSums (testvec);
-		REQUIRE (layers[1]->getLayerValues() == testvec);
-	}
-	SECTION ("RAW NODES") {
-		REQUIRE (neurons.size() == 2);
-		REQUIRE (neurons[1]->getRawWeights().size() == 2);
-		REQUIRE (neurons[1]->getValue () == 0.0);
-		layers[0]->setSums (testvec);
-		REQUIRE (layers[0]->getRawNeurons()[0]->getValue () == 1.0);
-		neurons[0]->setError (2.0);
-		REQUIRE (neurons[0]->getError() == 2.0);
-		REQUIRE (neurons[0]->sigmoid (0) == 0.5);
-	}
-	SECTION ("GUESSING"){
-			REQUIRE (testNN.guess(testvec).size() == 2);
-			REQUIRE (testNN.guess(testvec)[0] != 0);
-	}
-	SECTION ("ADJUSTING") {
-		REQUIRE (testNN.calcErrors(testvec, testvec)[0] == 0);
-		std::cout << "clcerr" << std::endl;
-		for (int i = 0; i < 1000; i++) {
-			testNN.adjust (testvec, testvals);
+TEST_CASE ("LAYER", ".") {
+	CLayer testLayer (10, 3);
+	REQUIRE (testLayer.m_neurons.size() == 10);
+	SECTION ("ALL NEURONS HAVE ENOUGH WEIGHTS") {
+		for (size_t i = 0; i < testLayer.m_neurons.size(); ++i) {
+			REQUIRE (testLayer.m_neurons[i].m_weights.size() == 3);
 		}
-		REQUIRE (testNN.guess(testvec)[0] == testvals[0]); //see if an improvement occured
-		REQUIRE (testNN.guess(testvec)[1] == testvals[1]);
 	}
+}
+
+TEST_CASE ("NN", ".") {
+
 }
