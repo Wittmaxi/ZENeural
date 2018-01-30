@@ -5,7 +5,7 @@ namespace ML {
 
 	double CNeuron::m_forwardSum (std::vector<double>& input) {
 		double output = 0.0f;
-		for (int i = 0; i < input.size(); i++) {
+		for (size_t i = 0; i < input.size(); i++) {
 			output += (input[i] * m_weights[i]);
 		} 
 		return output;

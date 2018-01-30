@@ -6,6 +6,7 @@
 #include "CNeuron.h"
 #include "CLayer.h"
 #include "Zeneural.h"
+#include "activation.h"
 
 using namespace ML;
 
@@ -22,6 +23,7 @@ TEST_CASE ("NEURON", ".") {
 
 TEST_CASE ("LAYER", ".") {
 	CLayer testLayer (10, 3);
+	testLayer.m_normalisation = ACT_SIGMOID;
 	std::vector<double> testVec {1.0f, 3.4f, 0.5f};	
 	REQUIRE (testLayer.m_neurons.size() == 10);
 	SECTION ("ALL NEURONS HAVE ENOUGH WEIGHTS") {
@@ -40,11 +42,14 @@ TEST_CASE ("LAYER", ".") {
 TEST_CASE ("NN", ".") {
 	NeuralNetwork NN;
 	std::vector<double> testVec {1.0f, 3.4f, 0.5f};
-	NN.addLayer (2, ACT_SIGMOID);
+	NN.addLayer (3, ACT_SIGMOID);
 	NN.addLayer (3, ACT_SIGMOID);
 	NN.addLayer (100, ACT_SIGMOID);
 	NN.addLayer (2, ACT_SIGMOID);
 	SECTION ("ENOUGH LAYERS") {
 		REQUIRE (NN.m_layers.size() == 4);
+	}
+	SECTION ("GUESSING") {
+		REQUIRE (NN.guess (testVec).size() == 2);
 	}
 }
