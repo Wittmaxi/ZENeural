@@ -7,6 +7,6 @@ class CNeuron {
 public:
 	std::vector<double> m_weights;
 	CNeuron (size_t llsize);
-	double forwardSum (std::vector<double>& input);
+	double m_forwardSum (std::vector<double>& input);
 };
 }

@@ -11,7 +11,7 @@ public:
 	std::vector<double> m_input;
 	std::vector<double> m_output;
 	std::vector<double> m_expected;
-	std::function <double (double)> m_normalisation;
+	double (*m_normalisation) (double);
 	void m_forward (std::vector<double>& input);
 	void m_backward (std::vector<double>& expected);
 };
