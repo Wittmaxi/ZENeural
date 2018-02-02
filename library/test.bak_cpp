@@ -1,6 +1,7 @@
 #include <vector>
 
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_MAIN 
+#define ML_ALLOW_DEBUG_STATEMENTS 1 
 #include "catch.hpp"
 
 #include "CNeuron.h"
@@ -9,6 +10,7 @@
 #include "activation.h"
 
 using namespace ML;
+
 
 TEST_CASE ("NEURON", ".") {
 	CNeuron testNeuron(3);
@@ -37,19 +39,34 @@ TEST_CASE ("LAYER", ".") {
 		REQUIRE(testLayer.m_output.size() == 3);
 		REQUIRE(testLayer.m_input.size() == 3);
 	}
+	SECTION ("REQUIRE THE m_normalisation TO WORK") {
+		REQUIRE (testLayer.m_normalisation (1 == 0.5));
+	}
 }
 
 TEST_CASE ("NN", ".") {
-	NeuralNetwork NN;
+	NeuralNetwork NN {true};
 	std::vector<double> testVec {1.0f, 3.4f, 0.5f};
 	NN.addLayer (3, ACT_SIGMOID);
-	NN.addLayer (3, ACT_SIGMOID);
-	NN.addLayer (100, ACT_SIGMOID);
+	REQUIRE (NN.m_layers.size() == 1);
 	NN.addLayer (2, ACT_SIGMOID);
+	REQUIRE (NN.m_layers.size() == 2);
+	NN.addLayer (7, ACT_SIGMOID);
+	REQUIRE (NN.m_layers.size() == 3);
+	NN.addLayer (1, ACT_SIGMOID);
 	SECTION ("ENOUGH LAYERS") {
 		REQUIRE (NN.m_layers.size() == 4);
+		SECTION ("NEURONS") {
+			REQUIRE (NN.m_layers[0].m_neurons.size() == 3);
+			REQUIRE (NN.m_layers[2].m_neurons.size() == 7);
+			SECTION ("WEIGHTS") {
+				REQUIRE (NN.m_layers[0].m_neurons[0].m_weights.size() == 0);
+				REQUIRE (NN.m_layers[2].m_neurons[0].m_weights.size() == 2);
+			}
+		}
 	}
 	SECTION ("GUESSING") {
-		REQUIRE (NN.guess (testVec).size() == 2);
+		std::vector<double> retVec = NN.guess (testVec);
+		REQUIRE (retVec.size() == 1);
 	}
 }

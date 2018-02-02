@@ -1,6 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include <vector>
+#include "debugMachine.h"
 
 namespace ML {
 class CNeuron {

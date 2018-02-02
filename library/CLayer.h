@@ -2,6 +2,7 @@
 #include <vector>
 #include <functional>
 #include "CNeuron.h"
+#include "debugMachine.h"
 
 namespace ML {
 class CLayer{
@@ -11,7 +12,7 @@ public:
 	std::vector<double> m_input;
 	std::vector<double> m_output;
 	std::vector<double> m_expected;
-	double (*m_normalisation) (double);
+	std::function<double(double)> m_normalisation;
 	void m_forward (std::vector<double>& input);
 	void m_backward (std::vector<double>& expected);
 };
