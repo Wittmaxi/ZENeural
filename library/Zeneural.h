@@ -18,7 +18,8 @@ public:
 	void addLayer (size_t layerSize, std::function <double(double)> activation = ACT_SIGMOID);
 	std::vector<CLayer> m_layers;
 private:
-	void m_forward (std::vector<double>& input);
+	size_t m_trainingEpochs = 10;
+	void m_forward ();
 	void m_backward (std::vector<double>& expected);
 };
 }
