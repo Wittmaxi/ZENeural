@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 inline class debugMachine {
-public: 
+public:
 	void out (std::string toWrite, bool nl = true) {
 		if (write) {
 			std::cout << toWrite;
@@ -14,7 +14,7 @@ public:
 		}
 	}
 	void warn (std::string toWrite, bool nl = true) {
-		if (write) {
+		if (write && writeWarnings) {
 			std::cout << "\033[31mWARNING: " << toWrite << "\033[0m";
 			if (nl) {
 				std::cout << std::endl;
@@ -22,7 +22,7 @@ public:
 		}
 	}
 	void info (std::string toWrite, bool nl = true) {
-		if (write) {
+		if (write && writeInfos) {
 			std::cout << "\033[36mINFO: " << toWrite << "\033[0m";
 			if (nl) {
 				std::cout << std::endl;
@@ -30,7 +30,7 @@ public:
 		}
 	}
 	void debug (std::string toWrite, bool nl = true) {
-		if (write) {
+		if (write && writeDebug) {
 			std::cout << "\033[35mDEBUG: " << toWrite << "\033[0m";
 			if (nl) {
 				std::cout << std::endl;
@@ -38,4 +38,7 @@ public:
 		}
 	}	
 	bool write;
+	bool writeWarning;
+	bool writeInfos;
+	bool writeDebug;
 } d;

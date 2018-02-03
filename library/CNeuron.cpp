@@ -9,8 +9,7 @@ namespace ML {
 		double output = 0.0f;
 		for (size_t i = 0; i < m_weights.size(); i++) {
 			d.out ("Calculating wSum from last layer. Iteration: " + std::to_string (i));
-			output += (input.at(i) * m_weights[i]);
-			d.info ("Calculation = " + std::to_string(output));
+			output += (input.at(i) * m_weights.at(i));
 		} 
 		d.out ("--");
 		return output;
