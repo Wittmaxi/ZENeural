@@ -38,7 +38,7 @@ public:
 		}
 	}	
 	bool write;
-	bool writeWarnings;
-	bool writeInfos;
-	bool writeDebug;
+	bool writeWarnings = true;
+	bool writeInfos = true;
+	bool writeDebug = true;
 } d;
