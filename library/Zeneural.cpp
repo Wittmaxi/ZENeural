@@ -33,7 +33,7 @@ double NeuralNetwork::train (std::vector<double>& input, std::vector<double>& ex
 	d.out (":::");
 	for (size_t i = 0; i< m_trainingEpochs; i++) {
 		m_forward ();
-		m_backward (expected);
+		m_backward (calculateErrors(expected, m_layers.at(m_layers.size()-1).m_output));
 	}
 	d.out (":::");
 	d.out ("Finished training");
@@ -53,5 +53,14 @@ void NeuralNetwork::m_backward (std::vector<double>& expected) {
 	for (size_t i = m_layers.size()-1; i > 1; i--) {
 		//m_layers.at(i-1).m_backward(m_layers.at(i).m_expected);
 	}
+}
+
+std::vector<double>& NeuralNetwork::calculateErrors (std::vector<double>& expected, std::vector<double>& out) {
+	std::vector<double> *retVec = new std::vector<double>;
+	for (size_t i = 0; i < expected.size(); i++) {
+		d.info ("7891");
+		retVec->push_back (-(expected[i] - out[i]));
+	}
+	return *retVec;
 }
 }

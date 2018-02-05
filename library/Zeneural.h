@@ -21,5 +21,6 @@ private:
 	size_t m_trainingEpochs = 10;
 	void m_forward ();
 	void m_backward (std::vector<double>& expected);
+	std::vector<double>& calculateErrors (std::vector<double>& expected, std::vector<double>& out);
 };
 }
