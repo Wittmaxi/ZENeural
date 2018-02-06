@@ -17,7 +17,6 @@ void CLayer::m_forward (std::vector<double>& input) {
 }
 
 void CLayer::m_backward (std::vector<double>& expected) {
-	m_expected = expected;
 	for (size_t i = 0; i < m_neurons.size(); i++) {
 		for (size_t j = 0; j < m_neurons.at(i).m_weights.size(); j++) {
 			m_neurons.at(i).m_weights[j] -= (0.03f * expected.at(i) * m_output.at(i) * (1 - m_output.at(i)) * m_input.at(j)); 

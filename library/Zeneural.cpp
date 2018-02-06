@@ -51,7 +51,18 @@ void NeuralNetwork::m_backward (std::vector<double>& expected) {
 	m_layers.rbegin()->m_backward (expected); 
 	d.out ("finished");
 	for (size_t i = m_layers.size()-1; i > 1; i--) {
-		//m_layers.at(i-1).m_backward(m_layers.at(i).m_expected);
+		std::vector<double> errors;
+		for (size_t j = m_layers[i-1].m_neurons.size(); j < m_layers[i-1].m_neurons.size(); j++) { //calculate ÐError/Ðout for every neuron 
+			double effect = 0.0f;
+			for (size_t h = 0; h < m_layers[i].m_neurons.size()) {
+				double netInput = m_layers[i].m_neurons[h].m_forward_sums (m_layers[i].m_input);
+				effect += Ðm_layers[i].m_output[h]/ÐnetInput;
+				effect += ;
+			}
+			errors.push_back (ðEtotal/m_layers[i].m_neurons[j]);
+			errors.push_back ();
+		}
+		m_layers.at(i-1).m_backward(errors);
 	}
 }
 

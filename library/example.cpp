@@ -8,6 +8,7 @@ int main () {
 	ML::NeuralNetwork nn (true);
 	nn.addLayer(2);
 	nn.addLayer(1);
+	nn.addLayer(100);
 	nn.addLayer(1);
 	d.info ("FORWARDING SUMS HOPEFULLY");
 	std::vector<double> testVec {1.0f, 1.0f};
