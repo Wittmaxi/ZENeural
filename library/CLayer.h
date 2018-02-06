@@ -15,6 +15,5 @@ public:
 	std::function<double(double)> m_normalisation;
 	void m_forward (std::vector<double>& input);
 	void m_backward (std::vector<double>& expected);
-	void calcRequired();
 };
 }

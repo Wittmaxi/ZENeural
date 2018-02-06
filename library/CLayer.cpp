@@ -17,34 +17,11 @@ void CLayer::m_forward (std::vector<double>& input) {
 }
 
 void CLayer::m_backward (std::vector<double>& expected) {
-	d.out ("HI");
+	m_expected = expected;
 	for (size_t i = 0; i < m_neurons.size(); i++) {
-		d.out ("HI2");
-		d.out ("i == " + std::to_string (i));
-		d.out ("m_neurons.size() == " + std::to_string (m_neurons.size()));
-		d.out ("m_neurons[i].m_weights.size() == " + std::to_string (m_neurons.at(i).m_weights.size()));
-		d.out ("m_neurons[i].m_weights.size() == " + std::to_string (m_neurons.at(i).m_weights.size()));
-		d.out ("expected.size() == " + std::to_string (expected.size()));
 		for (size_t j = 0; j < m_neurons.at(i).m_weights.size(); j++) {
-			d.info ("Gonna change weights");
-			d.out ("1");
-			expected.at(i);
-			d.out ("1");
-			d.info ("m_weights before : " + std::to_string(m_neurons.at(i).m_weights.at(j)));
 			m_neurons.at(i).m_weights[j] -= (0.03f * expected.at(i) * m_output.at(i) * (1 - m_output.at(i)) * m_input.at(j)); 
-			d.info ("m_weights after : " + std::to_string(m_neurons[i].m_weights[j]));
 		}
-		d.out ("out of backward");
-	}
-}
-
-void CLayer::calcRequired () {
-	for (size_t i = 0; i < m_neurons[0].m_weights.size(); i++) {
-		double diff;
-		for (size_t j = 0; j < m_neurons.size(); j++) {
-			diff += (0);
-		}
-		m_expected.push_back (diff);
 	}
 }
 }
