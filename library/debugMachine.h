@@ -2,8 +2,9 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <vector>
 
-inline class debugMachine {
+class __debugMachine {
 public:
 	void out (std::string toWrite, bool nl = true) {
 		if (write) {
@@ -37,8 +38,50 @@ public:
 			}
 		}
 	}	
+	void good (std::string toWrite, bool nl = true) {
+		if (write) {
+			std::cout << "\033[32mGOOD: " << toWrite << "\033[0m";
+			if (nl) {
+				std::cout << std::endl;
+			}
+		}
+	}
 	bool write;
 	bool writeWarnings = true;
 	bool writeInfos = true;
 	bool writeDebug = true;
-} d;
+};
+
+struct __assert {
+	int line_number;
+	std::string name;
+	__assert (int a, std::string b) {
+		line_number = a;
+		name = b;
+	}
+};
+
+class __tester {
+	std::vector<__assert> failed_assert;
+	__debugMachine dm;
+public:
+	__tester () {
+		dm.write = true;
+	}
+	void REQUIRE (bool i, std::string T) {
+		if (!(i)) {
+			dm.warn ("ASSERT " + T + " FAILED");
+			failed_assert.push_back (__assert (__LINE__, T));
+		} else {
+			dm.good ("ASSERT " + T + " WORKED");
+		} 
+	}
+	void report () {
+		if (failed_assert.size() > 0) {
+			dm.out ("=================================================");
+		}
+		for (auto i : failed_assert) {
+			dm.warn (i.name + " FAILED");
+		}
+	}
+};
