@@ -1,5 +1,6 @@
 #include "debugMachine.h"
 #include "Perceptron.hpp"
+#include "normalisation.h"
 #include <cstdlib>
 #include <random>
 
@@ -9,12 +10,13 @@ int main() {
 	rng.seed (std::random_device ()());
 	std::uniform_int_distribution<std::mt19937::result_type> dist4 (0, 3);
 	std::vector<std::vector<double>> examples {
-		{0,0},  {0,1}, {1,1}, {1,0}
+		{0,0},  {0,1}, {1,1}, {1,1}
 	};
 	std::vector<double> out {
-		-1, -1, 1, -1
+		0, 0, 1, 0
 	};
 	ZNN::Perceptron a(2, false);
+	a.setNormalisation (ZNN::binaryStep);
 	std::srand (123123);
 	int i = dist4(rng);
 	std::cout << a.guess (examples[i]) << "\n";
