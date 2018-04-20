@@ -19,4 +19,7 @@ namespace ZNN {
 		}
 		return 0;
 	}
+	inline double step (double x) {
+		return floor (x);
+	}
 }
