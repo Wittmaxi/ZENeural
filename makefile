@@ -1,3 +1,6 @@
+all: test
+
+
 make:
 	-mkdir ./build
 	g++ -c ./library/Perceptron.cpp -o ./build/perceptron.o
@@ -8,13 +11,17 @@ install: make
 	sudo cp -r ./library/header /usr/local/lib
 
 uninstall:
-	-sudo rm -r /usr/local/lib/header
-	-sudo rm /usr/local/lib/zeneural.a
+	@-sudo rm -r /usr/local/lib/header
+	@-sudo rm /usr/local/lib/zeneural.a
 
 clean:
-	-rm -r ./build
-	-rm ./test
 
-test:
+	@-rm -r ./build
+	@-rm ./test
+
+test: 
 	g++ ./library/*.cpp -o test
 	./test
+
+debug:
+	g++ ./library/*.cpp -o test -g

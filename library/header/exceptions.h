@@ -11,4 +11,9 @@ namespace ZNN {
 			return ("Learn-Rate set to zero, Neural Network can't operate in such a condition");
 		}
 	};
+	class LAYERSIZEZERO : public std::exception {
+		const char* what () const throw () {
+			return ("Layer-Size is zero.");
+		}
+	};
 }

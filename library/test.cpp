@@ -1,30 +1,22 @@
-#include "debugMachine.h"
-#include "Perceptron.hpp"
-#include "normalisation.h"
-#include <cstdlib>
-#include <random>
+#include "header/debugMachine.h"
+#include "header/Perceptron.hpp"
+#include "header/NeuralNetwork.hpp"
+#include "header/normalisation.h"
 
 int main() {
 	__tester t;
-	std::mt19937 rng;
-	rng.seed (std::random_device ()());
-	std::uniform_int_distribution<std::mt19937::result_type> dist4 (0, 3);
-	std::vector<std::vector<double>> examples {
-		{0,0},  {0,1}, {1,1}, {1,1}
-	};
-	std::vector<double> out {
-		0, 0, 1, 0
-	};
-	ZNN::Perceptron a(2, false);
-	a.setNormalisation (ZNN::binaryStep);
-	std::srand (123123);
-	int i = dist4(rng);
-	std::cout << a.guess (examples[i]) << "\n";
-	for (int j = 0; j < 100; j++) {
-		i = dist4 (rng);
-		a.train (examples[i], out[i]);
-	}
-	std::cout << examples[i][0] << " " << examples[i][1] << "\n";
-	std::cout << a.guess (examples[i]) << "\n";
+	ZNN::NeuralNetwork b{};
+	std::vector <double> a {0};
+	b.addLayer (1);
+	b.addLayer (20);
+	b.addLayer (2);
+	t.REQUIRE (b.getRawLayers().size() == 3, "RIGHT NUMBER OF LAYERS");
+	t.REQUIRE (b.getRawLayers()[0].size == 1, "L1 RIGHT SIZE");
+	t.REQUIRE (b.getRawLayers()[1].size == 20, "L2 RIGHT SIZE");
+	t.REQUIRE (b.getRawLayers()[2].size == 2, "L3 RIGHT SIZE");
+	t.REQUIRE (b.getRawLayers()[0].isize == 0, "L1 RIGHT ISIZE");
+	t.REQUIRE (b.getRawLayers()[1].isize == 1, "L2 RIGHT ISIZE");
+	t.REQUIRE (b.getRawLayers()[2].isize == 20, "L3 RIGHT ISIZE");
+	std::cout << b.guess (a)[0] << "\n";
 	t.report();
 }

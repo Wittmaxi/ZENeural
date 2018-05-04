@@ -6,6 +6,9 @@
 
 class __debugMachine {
 public:
+	__debugMachine (bool _write = true) {
+		write = _write;
+	}
 	void out (std::string toWrite, bool nl = true) {
 		if (write) {
 			std::cout << toWrite;
@@ -70,10 +73,10 @@ public:
 	}
 	void REQUIRE (bool i, std::string T) {
 		if (!(i)) {
-			dm.warn ("ASSERT " + T + " FAILED");
+			dm.warn ("ASSERT >>" + T + "<< FAILED");
 			failed_assert.push_back (__assert (__LINE__, T));
 		} else {
-			dm.good ("ASSERT " + T + " WORKED");
+			dm.good ("ASSERT >>" + T + "<< WORKED");
 		} 
 	}
 	void report () {
