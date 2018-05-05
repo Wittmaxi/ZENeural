@@ -1,4 +1,4 @@
-all: test
+all:
 
 
 make:
@@ -20,7 +20,7 @@ clean:
 	@-rm ./test
 
 test: 
-	g++ ./library/*.cpp -o test
+	g++ -O0 ./library/*.cpp -o test
 	./test
 
 debug:

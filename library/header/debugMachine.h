@@ -4,47 +4,64 @@
 #include <cstdlib>
 #include <vector>
 
-class __debugMachine {
-public:
-	__debugMachine (bool _write = true) {
+class __debugMachine
+{
+  public:
+	__debugMachine(bool _write = true)
+	{
 		write = _write;
 	}
-	void out (std::string toWrite, bool nl = true) {
-		if (write) {
+	void out(std::string toWrite, bool nl = true)
+	{
+		if (write)
+		{
 			std::cout << toWrite;
-			if (nl) {
+			if (nl)
+			{
 				std::cout << std::endl;
 			}
 		}
 	}
-	void warn (std::string toWrite, bool nl = true) {
-		if (write && writeWarnings) {
+	void warn(std::string toWrite, bool nl = true)
+	{
+		if (write && writeWarnings)
+		{
 			std::cout << "\033[31mWARNING: " << toWrite << "\033[0m";
-			if (nl) {
+			if (nl)
+			{
 				std::cout << std::endl;
 			}
 		}
 	}
-	void info (std::string toWrite, bool nl = true) {
-		if (write && writeInfos) {
+	void info(std::string toWrite, bool nl = true)
+	{
+		if (write && writeInfos)
+		{
 			std::cout << "\033[36mINFO: " << toWrite << "\033[0m";
-			if (nl) {
+			if (nl)
+			{
 				std::cout << std::endl;
 			}
 		}
 	}
-	void debug (std::string toWrite, bool nl = true) {
-		if (write && writeDebug) {
+	void debug(std::string toWrite, bool nl = true)
+	{
+		if (write && writeDebug)
+		{
 			std::cout << "\033[35mDEBUG: " << toWrite << "\033[0m";
-			if (nl) {
+			if (nl)
+			{
 				std::cout << std::endl;
 			}
 		}
-	}	
-	void good (std::string toWrite, bool nl = true) {
-		if (write) {
+	}
+	void good(std::string toWrite, bool nl = true)
+	{
+		if (write)
+		{
 			std::cout << "\033[32mGOOD: " << toWrite << "\033[0m";
-			if (nl) {
+			if (nl)
+			{
 				std::cout << std::endl;
 			}
 		}
@@ -55,36 +72,48 @@ public:
 	bool writeDebug = true;
 };
 
-struct __assert {
+struct __assert
+{
 	int line_number;
 	std::string name;
-	__assert (int a, std::string b) {
+	__assert(int a, std::string b)
+	{
 		line_number = a;
 		name = b;
 	}
 };
 
-class __tester {
+class __tester
+{
 	std::vector<__assert> failed_assert;
 	__debugMachine dm;
-public:
-	__tester () {
+
+  public:
+	__tester()
+	{
 		dm.write = true;
 	}
-	void REQUIRE (bool i, std::string T) {
-		if (!(i)) {
-			dm.warn ("ASSERT >>" + T + "<< FAILED");
-			failed_assert.push_back (__assert (__LINE__, T));
-		} else {
-			dm.good ("ASSERT >>" + T + "<< WORKED");
-		} 
-	}
-	void report () {
-		if (failed_assert.size() > 0) {
-			dm.out ("=================================================");
+	void REQUIRE(bool i, std::string T)
+	{
+		if (!(i))
+		{
+			dm.warn("ASSERT >>" + T + "<< FAILED");
+			failed_assert.push_back(__assert(__LINE__, T));
 		}
-		for (auto i : failed_assert) {
-			dm.warn (i.name + " FAILED");
+		else
+		{
+			dm.good("ASSERT >>" + T + "<< WORKED");
+		}
+	}
+	void report()
+	{
+		if (failed_assert.size() > 0)
+		{
+			dm.out("=================================================");
+		}
+		for (auto i : failed_assert)
+		{
+			dm.warn(i.name + " FAILED");
 		}
 	}
 };
