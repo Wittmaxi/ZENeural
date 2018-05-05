@@ -8,10 +8,11 @@ make:
 
 install: make
 	sudo cp ./build/zeneural.a /usr/local/lib
-	sudo cp -r ./library/header /usr/local/lib
+	sudo mkdir /usr/local/lib/zeneural
+	sudo cp -r ./library/header/* /usr/local/lib/zeneural/
 
 uninstall:
-	@-sudo rm -r /usr/local/lib/header
+	@-sudo rm -r /usr/local/lib/zeneural
 	@-sudo rm /usr/local/lib/zeneural.a
 
 clean:
