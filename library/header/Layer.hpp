@@ -8,6 +8,8 @@ namespace ZNN
 {
 class Neuron
 {
+	__debugMachine d{true};
+
   public:
 	std::vector<double> weights;
 	Neuron(size_t llsize, double initVal)
@@ -17,9 +19,9 @@ class Neuron
 			weights.push_back(initVal);
 		}
 	}
-	void improve_weights(size_t w, double derivative, double input)
+	void improve_weights(size_t w, double derivative)
 	{
-		weights[w] += -0.25 * derivative * input;
+		weights[w] += -0.25 * derivative;
 	}
 };
 

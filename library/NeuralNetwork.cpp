@@ -43,6 +43,7 @@ std::vector<double> NeuralNetwork::guess(std::vector<double> &inputs)
 double NeuralNetwork::train(std::vector<double> &input, std::vector<double> &expected)
 {
 	target = expected;
+	guess(input);
 	for (size_t i = layers.size() - 1; i > 0; i--)
 	{
 		layers[i].train(calculate_derivatives(i));
@@ -92,12 +93,12 @@ std::vector<double> NeuralNetwork::calculate_derivatives(int index)
 	std::vector<double> derivatives;
 	for (size_t i = 0; i < layers[index].size; i++)
 	{
-		float sum = 0;
+		double sum = 0;
 		for (int j = 0; j < layers[index + 1].size; j++)
 		{
 			sum += llder[j] * layers[index + 1].neurons[j].weights[i];
 		}
-		derivatives.push_back((1 - layers[index].outputs[i]) * sum);
+		derivatives.push_back((layers[index].outputs[i] * (1 - layers[index].outputs[i])) * sum);
 	}
 	llder = derivatives;
 	return derivatives;

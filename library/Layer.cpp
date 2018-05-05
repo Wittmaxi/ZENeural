@@ -37,7 +37,7 @@ void Layer::train(std::vector<double> derivatives)
 	{
 		for (int j = 0; j < isize; j++)
 		{
-			neurons[i].improve_weights(j, derivatives[i], inputs[j]);
+			neurons[i].improve_weights(j, derivatives[i] * inputs[j]);
 		}
 	}
 }
