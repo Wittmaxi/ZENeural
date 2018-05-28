@@ -6,7 +6,7 @@ I GIVE NO GUARANTEE, THAT LATER VERSIONS ARE BACKWARDS-COMPATIBLE!
 
 # Creator of ZENeural
 Made by Maximilian W. 
-Contact me at wittmaxi@outlook.de if you have suggestions
+Contact me at wittmaxi@linux.pizza if you have suggestions
 
 # Installation
 This Library doesnt need installation. Simply download the files and include them in C++ with 
