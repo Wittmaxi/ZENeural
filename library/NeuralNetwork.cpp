@@ -4,10 +4,9 @@
 
 namespace ZNN
 {
-__debugMachine d{true};
-NeuralNetwork::NeuralNetwork(bool debug)
+NeuralNetwork::NeuralNetwork()
 {
-	d.write = debug;
+	setNormalization(Fermi());
 }
 
 NeuralNetwork::~NeuralNetwork()
@@ -22,11 +21,11 @@ void NeuralNetwork::addLayer(size_t size, double stdWeightVal)
 	}
 	if (layers.size() == 0)
 	{ //inputLayer
-		layers.push_back(Layer(size, 0, stdWeightVal));
+		layers.push_back(Layer(size, norm.normalization, 0, stdWeightVal));
 	}
 	else
 	{
-		layers.push_back(Layer(size, layers.back().size, stdWeightVal));
+		layers.push_back(Layer(size, norm.normalization, layers.back().size + 1, stdWeightVal));
 	}
 }
 
@@ -58,11 +57,12 @@ void NeuralNetwork::setLearnRate(double lr)
 	}
 }
 
-void NeuralNetwork::setNormalisation(std::function<double(double)> func)
+void NeuralNetwork::setNormalization(Normalization nnorm)
 {
+	norm = nnorm;
 	for (size_t i = 0; i < layers.size(); i++)
 	{
-		layers[i].normalisation = func;
+		layers[i].normalisation = nnorm.normalization;
 	}
 }
 
@@ -77,7 +77,7 @@ std::vector<double> NeuralNetwork::calculate_ll_derivatives(int index)
 	for (size_t i = 0; i < layers[index].size; i++)
 	{
 		// δE/wjk=(ok−sk)⋅φ'(netk) * oj
-		derivatives.push_back((layers.at(index).outputs.at(i) - target.at(i)) * (layers.at(index).outputs[i] * (1 - layers.at(index).outputs.at(i)))); //calculate *that* derivative
+		derivatives.push_back((layers.at(index).outputs.at(i) - target.at(i)) * norm.derivative(layers.at(index).outputs[i])); //calculate *that* derivative
 	}
 	llder = derivatives;
 	return llder;
@@ -91,16 +91,16 @@ std::vector<double> NeuralNetwork::calculate_derivatives(int index)
 		return llder;
 	} //outter layers get a different derivative
 	std::vector<double> derivatives;
-	for (size_t i = 0; i < layers[index].size; i++)
+	for (size_t i = 0; i < layers[index].size + 1; i++)
 	{
 		double sum = 0;
 		for (int j = 0; j < layers[index + 1].size; j++)
 		{
 			sum += llder[j] * layers[index + 1].neurons[j].weights[i];
 		}
-		derivatives.push_back((layers[index].outputs[i] * (1 - layers[index].outputs[i])) * sum);
+		derivatives.push_back(norm.derivative(layers[index].outputs[i]) * sum);
 	}
 	llder = derivatives;
 	return derivatives;
 }
-}
+} // namespace ZNN

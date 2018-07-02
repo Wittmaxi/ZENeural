@@ -19,9 +19,9 @@ class Neuron
 			weights.push_back(initVal);
 		}
 	}
-	void improve_weights(size_t w, double derivative)
+	void improve_weights(double lr, size_t w, double derivative)
 	{
-		weights[w] += -0.25 * derivative;
+		weights[w] += lr * -derivative;
 	}
 };
 
@@ -32,13 +32,13 @@ class Layer
 	std::vector<double> outputs;
 	std::function<double(double)> normalisation;
 	std::vector<Neuron> neurons;
-	double learnRate;
+	double learnRate = 0.25;
 	size_t isize;
 	size_t size;
 
-	Layer(size_t layerSize, size_t llsize, double initVal = 0.0f);
+	Layer(size_t layerSize, std::function<double(double)>, size_t llsize, double initVal = 0.0f);
 	~Layer();
 	void calculate(std::vector<double> &llout);
 	void train(std::vector<double> derivatives);
 };
-}
+} // namespace ZNN

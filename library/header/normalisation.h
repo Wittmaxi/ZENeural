@@ -1,28 +1,21 @@
 #pragma once
 #include <math.h>
+#include <functional>
 
 namespace ZNN
 {
-inline double fermi(double x)
+class Normalization
 {
-	return (1 / (1 + (exp(-x))));
-}
-
-inline double ident(double x)
-{
-	return x;
-}
-
-inline double binaryStep(double x)
-{
-	if (x > 0)
+  public:
+	Normalization(){};
+	Normalization(std::function<double(double)> norm, std::function<double(double)> der)
 	{
-		return 1;
+		normalization = norm;
+		derivative = der;
 	}
-	return 0;
-}
-inline double step(double x)
-{
-	return floor(x);
-}
-}
+	std::function<double(double)> normalization;
+	std::function<double(double)> derivative;
+};
+
+Normalization Fermi();
+} // namespace ZNN

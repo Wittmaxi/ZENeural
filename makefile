@@ -1,12 +1,11 @@
-all:
+all: test
 
-
-make:
+build:
 	-mkdir ./build
-	g++ -c ./library/Perceptron.cpp -o ./build/perceptron.o
-	ar rcs ./build/zeneural.a ./build/perceptron.o 
+	g++ -c ./library/*.cpp -o ./build/zeneural.o
+	ar rcs ./build/zeneural.a ./build/zeneural.o 
 
-install: make
+install: build
 	sudo cp ./build/zeneural.a /usr/local/lib
 	sudo mkdir /usr/local/lib/zeneural
 	sudo cp -r ./library/header/* /usr/local/lib/zeneural/
