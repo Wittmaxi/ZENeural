@@ -21,11 +21,11 @@ void NeuralNetwork::addLayer(size_t size, double stdWeightVal)
 	}
 	if (layers.size() == 0)
 	{ //inputLayer
-		layers.push_back(Layer(size, norm.normalization, 0, stdWeightVal));
+		layers.push_back(Layer(size, 0, stdWeightVal, norm.normalization));
 	}
 	else
 	{
-		layers.push_back(Layer(size, norm.normalization, layers.back().size + 1, stdWeightVal));
+		layers.push_back(Layer(size, layers.back().size + 1, stdWeightVal, norm.normalization));
 	}
 }
 
@@ -45,24 +45,29 @@ double NeuralNetwork::train(std::vector<double> &input, std::vector<double> &exp
 	guess(input);
 	for (size_t i = layers.size() - 1; i > 0; i--)
 	{
-		layers[i].train(calculate_derivatives(i));
+		auto m = calculateDerivatives(i);
+		layers[i].train(m);
 	}
 }
 
 void NeuralNetwork::setLearnRate(double lr)
 {
+	if (lr == 0)
+	{
+		throw LEARNRATEZERO();
+	}
 	for (size_t i = 0; i < layers.size(); i++)
 	{
 		layers[i].learnRate = lr;
 	}
 }
 
-void NeuralNetwork::setNormalization(Normalization nnorm)
+void NeuralNetwork::setNormalization(Normalization new_normalization)
 {
-	norm = nnorm;
+	norm = new_normalization;
 	for (size_t i = 0; i < layers.size(); i++)
 	{
-		layers[i].normalisation = nnorm.normalization;
+		layers[i].normalisation = new_normalization.normalization;
 	}
 }
 
@@ -71,7 +76,7 @@ const std::vector<Layer> NeuralNetwork::getRawLayers()
 	return layers;
 }
 
-std::vector<double> NeuralNetwork::calculate_ll_derivatives(int index)
+std::vector<double> NeuralNetwork::calculateLastLayerDerivatives(int index)
 {
 	std::vector<double> derivatives;
 	for (size_t i = 0; i < layers[index].size; i++)
@@ -79,16 +84,16 @@ std::vector<double> NeuralNetwork::calculate_ll_derivatives(int index)
 		// δE/wjk=(ok−sk)⋅φ'(netk) * oj
 		derivatives.push_back((layers.at(index).outputs.at(i) - target.at(i)) * norm.derivative(layers.at(index).outputs[i])); //calculate *that* derivative
 	}
-	llder = derivatives;
-	return llder;
+	lastLayerDerivative = derivatives;
+	return lastLayerDerivative;
 }
 
-std::vector<double> NeuralNetwork::calculate_derivatives(int index)
+std::vector<double> NeuralNetwork::calculateDerivatives(int index)
 {
 	if (index == layers.size() - 1)
 	{
-		calculate_ll_derivatives(index);
-		return llder;
+		calculateLastLayerDerivatives(index);
+		return lastLayerDerivative;
 	} //outter layers get a different derivative
 	std::vector<double> derivatives;
 	for (size_t i = 0; i < layers[index].size + 1; i++)
@@ -96,11 +101,11 @@ std::vector<double> NeuralNetwork::calculate_derivatives(int index)
 		double sum = 0;
 		for (int j = 0; j < layers[index + 1].size; j++)
 		{
-			sum += llder[j] * layers[index + 1].neurons[j].weights[i];
+			sum += lastLayerDerivative[j] * layers[index + 1].neurons[j].weights[i];
 		}
-		derivatives.push_back(norm.derivative(layers[index].outputs[i]) * sum);
+		derivatives.push_back(norm.derivative(layers[index].outputs[i]) * sum * std::pow(100, layers.size() - (index + 1)));
 	}
-	llder = derivatives;
+	lastLayerDerivative = derivatives;
 	return derivatives;
 }
 } // namespace ZNN

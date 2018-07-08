@@ -7,14 +7,14 @@ int main()
 {
 	ZNN::NeuralNetwork b;
 	std::vector<std::vector<double>> input{{1, 0}, {0, 1}, {0, 0}, {1, 1}};
-	std::vector<std::vector<double>> target{{0}, {0}, {1}, {1}};
+	std::vector<std::vector<double>> target{{0}, {0}, {1}, {0}};
 	b.addLayer(2);
-	b.addLayer(3);
+	b.addLayer(5);
 	b.addLayer(1);
-	b.setLearnRate(0.4);
+	b.setLearnRate(0.5);
 	b.setNormalization(ZNN::Fermi());
 	std::cout << b.guess(input[0])[0] << "\n\n\n";
-	for (int i = 0; i < 10000; i++)
+	for (int i = 0; i < 1000; i++)
 	{
 		b.train(input[0], target[0]);
 		b.train(input[1], target[1]);

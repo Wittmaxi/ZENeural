@@ -4,8 +4,8 @@
 
 namespace ZNN
 {
-Layer::Layer(size_t layerSize, std::function<double(double)> norm, size_t llsize, double initVal)
-	: neurons(layerSize, Neuron(llsize, initVal))
+Layer::Layer(size_t layerSize, size_t llsize, double initWeightVal, std::function<double(double)> norm)
+	: neurons(layerSize, Neuron(llsize, initWeightVal))
 {
 	isize = llsize;
 	size = layerSize;
@@ -19,26 +19,27 @@ Layer::~Layer()
 void Layer::calculate(std::vector<double> &llout)
 {
 	inputs = llout;
+	inputs.push_back(1);
 	outputs.clear();
 	for (size_t i = 0; i < size; i++)
 	{
 		double val = 0;
 		for (int j = 0; j < isize; j++)
 		{
-			val += llout[j] * neurons[i].weights[j];
+			val += inputs[j] * neurons[i].weights[j];
 		}
 		outputs.push_back(normalisation(val));
 	}
-	outputs.push_back(1);
 }
 
 void Layer::train(std::vector<double> derivatives)
 {
+
 	for (size_t i = 0; i < neurons.size(); i++)
 	{
 		for (int j = 0; j < isize; j++)
 		{
-			neurons[i].improve_weights(learnRate, j, derivatives[i] * inputs[j]);
+			neurons[i].weights[j] += -learnRate * derivatives[i] * inputs[j];
 		}
 	}
 }

@@ -11,14 +11,14 @@ class NeuralNetwork
 {
 	std::vector<Layer> layers;
 	std::vector<double> target;
-	std::vector<double> llder;								 //derivative of the last layer
-	std::vector<double> calculate_ll_derivatives(int index); //last layer
-	std::vector<double> calculate_derivatives(int index);	//calculate the derivatives
+	std::vector<double> lastLayerDerivative;					  //derivative of the last layer
+	std::vector<double> calculateLastLayerDerivatives(int index); //last layer
+	std::vector<double> calculateDerivatives(int index);		  //calculate the derivatives
   public:
 	Normalization norm;
 	NeuralNetwork();
 	~NeuralNetwork();
-	void addLayer(size_t number, double stdWeightVal = 0.01f);
+	void addLayer(size_t size, double stdWeightVal = 0.01f);
 	std::vector<double> guess(std::vector<double> &inputs);
 	double train(std::vector<double> &input, std::vector<double> &expected);
 	void setLearnRate(double learnRate);

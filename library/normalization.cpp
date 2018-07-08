@@ -8,7 +8,7 @@ Normalization Fermi()
         return (1 / (1 + (std::exp(-input))));
     };
     std::function<double(double)> derivative = [=](double input) -> double {
-        return normalization(input) * (1 - normalization(input));
+        return input * (1 - input);
     };
     return Normalization(normalization, derivative);
 }
