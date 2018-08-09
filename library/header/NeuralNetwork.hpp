@@ -1,28 +1,110 @@
 #pragma once
 #include <vector>
-#include <functional>
+#include <string>
+#include <math.h>
 #include "Layer.hpp"
-#include "debugMachine.h"
-#include "normalisation.h"
+#include "normalization.h"
+#include "util/assert.h"
+#include <iostream>
 
 namespace ZNN
 {
+template <class floatType = double>
 class NeuralNetwork
 {
-	std::vector<Layer> layers;
-	std::vector<double> target;
-	std::vector<double> lastLayerDerivative;					  //derivative of the last layer
-	std::vector<double> calculateLastLayerDerivatives(int index); //last layer
-	std::vector<double> calculateDerivatives(int index);		  //calculate the derivatives
   public:
-	Normalization norm;
-	NeuralNetwork();
-	~NeuralNetwork();
-	void addLayer(size_t size, double stdWeightVal = 0.01f);
-	std::vector<double> guess(std::vector<double> &inputs);
-	double train(std::vector<double> &input, std::vector<double> &expected);
-	void setLearnRate(double learnRate);
-	void setNormalization(Normalization norm);
-	const std::vector<Layer> getRawLayers();
+	void setInputLayerSize(unsigned int size)
+	{
+		assert(inputLayerSize != 0, "You cannot set the size of the Input layer twice");
+		assert(size == 0, "You cannot set an input layer's size to a smaller value than zero");
+
+		inputLayerSize = size;
+		reconstructOutputLayer();
+	}
+	void setOutputLayerSize(unsigned int size)
+	{
+		assert(outputLayerSize != 0, "You cannot set the size of the Output layer twice");
+		assert(size == 0, "You cannot set an output layer's size to a smaller value than zero");
+
+		outputLayerSize = size;
+		reconstructOutputLayer();
+	}
+	void addHiddenLayer(unsigned int layerSize)
+	{
+		layers.push_back(Layer<floatType>(layerSize, getLastLayersSize()));
+		reconstructOutputLayer();
+	}
+
+	std::vector<floatType> guess(std::vector<floatType> input)
+	{
+		assert(input.size() != inputLayerSize, "Wrong number of elements in the Input vector!");
+
+		std::vector<floatType> results = input;
+		for (auto &i : layers)
+			results = i.calculate(results);
+		return outputLayer.calculate(results);
+	}
+
+	floatType train(std::vector<floatType> input, std::vector<floatType> target)
+	{
+		guess(input);
+		outputLayer.train(target);
+		std::vector<floatType> lastLayersDerivative = outputLayer.derivatives;
+		for (auto &i : layers)
+		{
+			i.train(lastLayersDerivative);
+			lastLayersDerivative = i.derivatives;
+		}
+		return calculateTotalError();
+	}
+
+	void setLearningRate(floatType learningRate)
+	{
+		for (auto &i : layers)
+		{
+			i.learningRate = learningRate;
+		}
+		outputLayer.learningRate = learningRate;
+	}
+
+	void setNormalization(Normalization<floatType> normalizationObject)
+	{
+		for (auto &i : layers)
+		{
+			i.normalization = normalizationObject;
+		}
+		outputLayer.normalization = normalizationObject;
+	}
+
+	std::string saveToString(); //TODO
+	void loadFromString(std::string objectString);
+
+  private:
+	unsigned int trainingIterations = 0;
+	unsigned int inputLayerSize = 0;
+	unsigned int outputLayerSize = 0;
+	std::vector<HiddenLayer<floatType>> layers;
+	OutputLayer<floatType> outputLayer;
+
+	unsigned int getLastLayersSize()
+	{
+		int lastLayersSize = inputLayerSize;
+		if (layers.size() > 0)
+			lastLayersSize = layers.back().size;
+		return lastLayersSize;
+	}
+
+	double calculateTotalError()
+	{
+		double temporaryError;
+		for (auto i : outputLayer.errors)
+			temporaryError += std::pow(i, 2);
+		return 1 / 2 * temporaryError;
+	}
+
+	void reconstructOutputLayer()
+	{
+		OutputLayer<floatType> outputLayer = OutputLayer<floatType>(outputLayerSize, getLastLayersSize());
+	}
 };
 } // namespace ZNN

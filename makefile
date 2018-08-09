@@ -25,3 +25,4 @@ test:
 
 debug:
 	g++ ./library/*.cpp -o test -g
+	gdb ./test
