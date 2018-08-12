@@ -13,7 +13,7 @@ class Neuron
 {
   public:
 	Neuron(unsigned int inputSize)
-		: weights(inputSize, 0.0f)
+		: weights(inputSize, 0.1f)
 	{
 	}
 
@@ -37,22 +37,21 @@ class Layer
 	Layer(){};
 
 	Layer(unsigned int _size, unsigned int _inputSize)
-		: neurons(_size, Neuron<floatType>(_inputSize)), size(_size), inputSize(_inputSize)
+		: size(_size), inputSize(_inputSize), neurons(_size, Neuron<floatType>(_inputSize))
 	{
 		normalization = Fermi<floatType>();
 	}
 
 	std::vector<floatType> calculate(std::vector<floatType> inputs)
 	{
-		assert(neurons.size() == 0, "is zero in calc");
 		layerInputValues = inputs;
+		layerInputValues.push_back(1);
 		layerOutputValues = weightedSum(inputs);
 		return layerOutputValues;
 	}
 
 	std::vector<floatType> weightedSum(std::vector<floatType> inputs)
 	{
-		assert(neurons.size() == 0, "is zero in ws");
 		std::vector<floatType> temporaryResults;
 
 		for (size_t i = 0; i < neurons.size(); i++)
@@ -63,7 +62,7 @@ class Layer
 
 	unsigned int size;
 	unsigned int inputSize;
-	floatType learningRate = 0.1;
+	floatType learningRate = 0.2;
 	Normalization<floatType> normalization;
 
 	std::vector<Neuron<floatType>> neurons;
@@ -76,68 +75,88 @@ template <class floatType> //TODO
 class HiddenLayer : public Layer<floatType>
 {
   public:
+	using Layer<floatType>::Layer;
+
 	std::vector<floatType> calculateDerivatives();
 	void changeWeights(std::vector<floatType> derivatives){};
 	void train(std::vector<floatType> lastLayersDerivatives){};
 };
 
 template <class floatType>
-class OutputLayer : public virtual Layer<floatType>
+class OutputLayer : public Layer<floatType>
 {
   public:
-	OutputLayer(unsigned int _size, unsigned int _inputSize)
-	{
-		this->neurons = std::vector<Neuron<floatType>>(_size, Neuron<floatType>(_inputSize));
-		this->size = _size;
-		this->inputSize = _inputSize;
-		this->normalization = Fermi<floatType>();
-		std::cout << "HI\n";
-		std::cout << "size: " << this->neurons.size() << "\n";
-	}
-
 	std::vector<floatType> errors;
 	std::vector<floatType> targets;
 
-	OutputLayer(){};
+	using Layer<floatType>::Layer;
 
 	std::vector<floatType> calculateDerivatives()
 	{
-		assert(this->neurons.size() == 0, "is zero in calcder");
 		std::vector<floatType> temporaryDerivatives;
+		for (auto i : errors)
+		{
+			std::cout << i << " err\n";
+		}
+		for (auto i : this->layerInputValues)
+		{
+			std::cout << "layerinput val " << i;
+		}
+		std::cout << "\n";
+		std::cout << this->normalization.derivative(this->layerInputValues[0]) << "lol" << this->layerInputValues[0] << "\n";
 		for (size_t i = 0; i < this->size; i++)
-			temporaryDerivatives.push_back(errors[i] * -1 * this->normalization.derivative(this->layerInputValues[i]));
+			temporaryDerivatives.push_back(errors[i] * -1 * this->normalization.derivative(this->layerOutputValues[i]));
 
 		return temporaryDerivatives;
 	}
 
-	void changeWeights(std::vector<floatType> derivatives)
+	void changeWeights(std::vector<floatType> newDerivatives)
 	{
-		assert(this->neurons.size() == 0, "is zero in changeweights");
 		for (size_t i = 0; i < this->size; i++)
 			for (size_t j = 0; j < this->inputSize; j++)
-				this->neurons[i].weights[j] -= this->learningRate * this->layerInputValues[j] * derivatives[i];
+			{
+				this->neurons[i].weights[j] -= this->learningRate * this->layerInputValues[j] * newDerivatives[i];
+				std::cout << "in der " << newDerivatives[i] << " lr " << this->learningRate << " inval " << this->layerInputValues[i] << "\n";
+			}
 	}
 
 	std::vector<floatType>
-	calculateErrors(std::vector<floatType> targets)
+	calculateErrors(std::vector<floatType> newTargets)
 	{
-		assert(this->neurons.size() == 0, "is zero in calcerr");
-		std::cout << this->layerOutputValues.size() << "out size\n";
-		std::cout << this->neurons.size() << "neur size\n";
 		std::vector<floatType> errorsTemp;
-		for (size_t i = 0; i < targets.size(); i++)
-			errorsTemp.push_back(targets[i] - this->layerOutputValues.at(i));
+		for (size_t i = 0; i < newTargets.size(); i++)
+			errorsTemp.push_back(newTargets[i] - this->layerOutputValues.at(i));
 
 		errors = errorsTemp;
 		return errorsTemp;
 	}
 
-	void train(std::vector<floatType> targets)
+	void train(std::vector<floatType> newTargets)
 	{
-		assert(this->neurons.size() == 0, "is zero in train");
-		calculateErrors(targets);
+		calculateErrors(newTargets);
 		std::vector<floatType> generatedDerivatives = calculateDerivatives();
 		changeWeights(generatedDerivatives);
+		for (auto i : generatedDerivatives)
+		{
+			std::cout << i << " DERIV\n";
+		}
+		for (auto i : newTargets)
+		{
+			std::cout << i << " TARG\n";
+		}
+		for (auto i : errors)
+		{
+			std::cout << i << " ERR\n";
+		}
+		for (auto i : this->neurons)
+		{
+			for (auto j : i.weights)
+			{
+				std::cout << j << " weight ";
+			}
+			std::cout << "\n";
+		}
+		std::cout << "\n";
 	}
 }; // namespace ZNN
 

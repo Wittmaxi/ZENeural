@@ -25,10 +25,12 @@ Normalization<floatType> Fermi()
 		return (1 / (1 + (std::exp(-input))));
 	};
 	std::function<floatType(floatType)> derivative = [=](floatType input) -> floatType {
+		std::cout << "hi" << input << " " << input * (1 - input) << "\n";
 		return input * (1 - input);
 	};
 	return Normalization<floatType>(normalization, derivative);
 }
+
 template <class floatType>
 Normalization<floatType> Identity()
 {

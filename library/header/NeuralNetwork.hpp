@@ -31,7 +31,7 @@ class NeuralNetwork
 	}
 	void addHiddenLayer(unsigned int layerSize)
 	{
-		layers.push_back(Layer<floatType>(layerSize, getLastLayersSize()));
+		layers.push_back(HiddenLayer<floatType>(layerSize, getLastLayersSizeWithBias()));
 		reconstructOutputLayer();
 	}
 
@@ -61,9 +61,7 @@ class NeuralNetwork
 	void setLearningRate(floatType learningRate)
 	{
 		for (auto &i : layers)
-		{
 			i.learningRate = learningRate;
-		}
 		outputLayer.learningRate = learningRate;
 	}
 
@@ -79,7 +77,7 @@ class NeuralNetwork
 	std::string saveToString(); //TODO
 	void loadFromString(std::string objectString);
 
-  private:
+  protected:
 	unsigned int trainingIterations = 0;
 	unsigned int inputLayerSize = 0;
 	unsigned int outputLayerSize = 0;
@@ -88,10 +86,15 @@ class NeuralNetwork
 
 	unsigned int getLastLayersSize()
 	{
-		int lastLayersSize = inputLayerSize;
+		unsigned int lastLayersSize = inputLayerSize;
 		if (layers.size() > 0)
 			lastLayersSize = layers.back().size;
 		return lastLayersSize;
+	}
+
+	unsigned int getLastLayersSizeWithBias()
+	{
+		return getLastLayersSize() + 1;
 	}
 
 	double calculateTotalError()
@@ -104,7 +107,7 @@ class NeuralNetwork
 
 	void reconstructOutputLayer()
 	{
-		OutputLayer<floatType> outputLayer = OutputLayer<floatType>(outputLayerSize, getLastLayersSize());
+		outputLayer = OutputLayer<floatType>(outputLayerSize, getLastLayersSizeWithBias());
 	}
 };
 } // namespace ZNN
