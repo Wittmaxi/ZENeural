@@ -99,15 +99,15 @@ class NeuralNetwork
 
 	double calculateTotalError()
 	{
-		double temporaryError;
+		double temporaryError = 0;
 		for (auto i : outputLayer.errors)
-			temporaryError += std::pow(i, 2);
-		return 1 / 2 * temporaryError;
+			temporaryError += i * i;
+		return temporaryError / 2;
 	}
 
 	void reconstructOutputLayer()
 	{
 		outputLayer = OutputLayer<floatType>(outputLayerSize, getLastLayersSizeWithBias());
 	}
-};
+}; // namespace ZNN
 } // namespace ZNN
