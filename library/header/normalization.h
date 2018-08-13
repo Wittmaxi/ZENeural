@@ -1,3 +1,11 @@
+/*
+2018 Maximilian Wittmer
+wittmaxi@linux.pizza
+
+https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
+
+*/
+
 #pragma once
 #include <math.h>
 #include <functional>
@@ -5,9 +13,8 @@
 namespace ZNN
 {
 template <class floatType>
-class Normalization
+struct Normalization
 {
-  public:
 	Normalization(){};
 	Normalization(std::function<floatType(floatType)> norm, std::function<floatType(floatType)> der)
 	{
