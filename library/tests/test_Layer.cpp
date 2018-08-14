@@ -28,9 +28,11 @@ TEST_CASE("Layer")
     {
         testCalculate()
         {
-            Layer<double> layer(10, 100);
-            std::vector<double> inputs(9, 100);
-            CHECK(layer.calculate(inputs).size() == 10);
+            Layer<double> layer(1000, 100);
+            std::vector<double> inputs(999, 100);
+            std::vector<double> outputs = layer.calculate(inputs);
+            CHECK(outputs.size() == 1000);
+            CHECK(outputs[0] <= 1);
         }
     };
 

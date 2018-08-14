@@ -45,42 +45,48 @@ class NeuralNetwork
 	unsigned int getLastLayersSizeWithBias();
 
 	double calculateTotalError();
-	void reconstructOutputLayer();
+	void constructOutputLayer();
+	void checkCompleteSetup();
 };
 
 template <class floatType>
 void NeuralNetwork<floatType>::setInputLayerSize(unsigned int size)
 {
 	assert(inputLayerSize != 0, "You cannot set the size of the Input layer twice");
-	assert(size == 0, "You cannot set an input layer's size to a smaller value than zero");
+	assert(size == 0, "You cannot set an input layer's size to a value smaler than 1");
 
 	inputLayerSize = size;
-	reconstructOutputLayer();
 }
 
 template <class floatType>
 void NeuralNetwork<floatType>::setOutputLayerSize(unsigned int size)
 {
 	assert(outputLayerSize != 0, "You cannot set the size of the Output layer twice");
-	assert(size == 0, "You cannot set an output layer's size to a smaller value than zero");
+	assert(size == 0, "You cannot set an output layer's size to a value smaller than 1");
+	assert(inputLayerSize == 0, "You have to create atleast an input layer before creating an Output layer");
 
 	outputLayerSize = size;
-	reconstructOutputLayer();
+	constructOutputLayer();
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::addHiddenLayer(unsigned int layerSize)
+void NeuralNetwork<floatType>::addHiddenLayer(unsigned int size)
 {
-	layers.push_back(HiddenLayer<floatType>(layerSize, getLastLayersSizeWithBias()));
-	reconstructOutputLayer();
+	assert(inputLayerSize == 0, "You have to create atleast an input layer before creating an Output layer");
+	assert(size == 0, "You cannot set an hidden layer's size to a value smaller than 1");
+	assert(outputLayerSize != 0, "You cannot create hidden Layers behind of the Output Layer");
+
+	layers.push_back(HiddenLayer<floatType>(size, getLastLayersSizeWithBias()));
 }
 
 template <class floatType>
 std::vector<floatType> NeuralNetwork<floatType>::guess(std::vector<floatType> input)
 {
 	assert(input.size() != inputLayerSize, "Wrong number of elements in the Input vector!");
+	checkCompleteSetup();
 
-	std::vector<floatType> results = input;
+	std::vector<floatType>
+		results = input;
 	for (auto &i : layers)
 		results = i.calculate(results);
 	return outputLayer.calculate(results);
@@ -143,8 +149,15 @@ double NeuralNetwork<floatType>::calculateTotalError()
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::reconstructOutputLayer()
+void NeuralNetwork<floatType>::constructOutputLayer()
 {
 	outputLayer = OutputLayer<floatType>(outputLayerSize, getLastLayersSizeWithBias());
+}
+
+template <class floatType>
+void NeuralNetwork<floatType>::checkCompleteSetup()
+{
+	assert(outputLayerSize == 0, "You have not created an output Layer!");
+	assert(inputLayerSize == 0, "You have not created an input Layer!");
 }
 } // namespace ZNN
