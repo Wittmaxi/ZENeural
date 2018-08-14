@@ -1,6 +1,6 @@
 # ZENeural
 The goal of ZENeural is to be a multi-purpose Machine Learning library.
-It is Licensed under the Boost Standard License.
+It is Licensed under the Boost Software License.
 It's author is Maximilian Wittmer.
 
 
