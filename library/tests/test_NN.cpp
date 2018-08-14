@@ -25,6 +25,7 @@ TEST_CASE("Neural Network")
     {
         testSetOutputLayerSize()
         {
+            setInputLayerSize(1);
             setOutputLayerSize(1);
             CHECK(this->outputLayerSize == 1);
         }
@@ -43,6 +44,7 @@ TEST_CASE("Neural Network")
 
         void withHiddenLayers()
         {
+            setInputLayerSize(1);
             for (unsigned int i = 0; i < numberHiddenLayers; i++)
             {
                 addHiddenLayer(hiddenLayerSize);
@@ -80,11 +82,11 @@ TEST_CASE("Neural Network")
         void withNeuralNetwork()
         {
             setInputLayerSize(inputSize);
-            setOutputLayerSize(outputSize);
             for (size_t i = 0; i < hiddenSize; i++)
             {
                 addHiddenLayer(hiddenLayerSize);
             }
+            setOutputLayerSize(outputSize);
         }
 
         std::vector<double> andGuessOutput()
@@ -124,11 +126,11 @@ TEST_CASE("Neural Network")
         void withNeuralNetwork()
         {
             setInputLayerSize(inputSize);
-            setOutputLayerSize(outputSize);
             for (size_t i = 0; i < hiddenSize; i++)
             {
                 addHiddenLayer(hiddenLayerSize);
             }
+            setOutputLayerSize(outputSize);
         }
 
         void andLearningRate()
@@ -150,6 +152,7 @@ TEST_CASE("Neural Network")
     {
         testGetLastLayersSize()
         {
+            setInputLayerSize(1);
             addHiddenLayer(10);
             CHECK(getLastLayersSize() == 10);
         }
@@ -159,6 +162,7 @@ TEST_CASE("Neural Network")
     {
         testGetLastLayersSizeWithBias()
         {
+            setInputLayerSize(1);
             addHiddenLayer(10);
             CHECK(getLastLayersSizeWithBias() == 11);
         }
@@ -170,30 +174,6 @@ TEST_CASE("Neural Network")
         {
             outputLayer.errors = std::vector<double>{1, 1};
             CHECK(calculateTotalError() == 1);
-        }
-    };
-
-    struct testReconstructOutputLayer : public ZNN::NeuralNetwork<double>
-    {
-        const unsigned int size = 10;
-        const unsigned int lastLayerSize = 100;
-        testReconstructOutputLayer()
-        {
-            withLayers();
-            reconstructOutputLayer();
-            requireCorrectOutputLayer();
-        }
-
-        void withLayers()
-        {
-            setOutputLayerSize(size);
-            addHiddenLayer(lastLayerSize);
-        }
-
-        void requireCorrectOutputLayer()
-        {
-            CHECK(outputLayer.size == size);
-            CHECK(outputLayer.inputSize == lastLayerSize + 1);
         }
     };
 
@@ -286,7 +266,6 @@ TEST_CASE("Neural Network")
     testGetLastLayersSize();
     testGetLastLayersSizeWithBias();
     testCalculateTotalError();
-    testReconstructOutputLayer();
     testTrain();
     testTrainWithMultipleLayers();
 }
