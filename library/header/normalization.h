@@ -43,7 +43,7 @@ Normalization<floatType> Identity()
 	std::function<floatType(floatType)> normalization = [=](floatType input) -> floatType {
 		return input;
 	};
-	std::function<floatType(floatType)> derivative = [=](floatType input) -> floatType {
+	std::function<floatType(floatType)> derivative = [=](floatType) -> floatType {
 		return 1;
 	};
 	return Normalization<floatType>(normalization, derivative);

@@ -21,12 +21,15 @@ template <class floatType = double>
 class NeuralNetwork
 {
   public:
+	using vectorType = std::vector<floatType>;
+	using vectorReferenceType = const vectorType &;
+
 	void setInputLayerSize(unsigned int size);
 	void setOutputLayerSize(unsigned int size);
 	void addHiddenLayer(unsigned int layerSize);
 
-	std::vector<floatType> guess(std::vector<floatType> input);
-	floatType train(std::vector<floatType> input, std::vector<floatType> target);
+	vectorType guess(vectorReferenceType input);
+	floatType train(vectorReferenceType input, vectorReferenceType target);
 
 	void setLearningRate(floatType learningRate);
 	void setNormalization(Normalization<floatType> normalizationObject);
@@ -40,6 +43,8 @@ class NeuralNetwork
 	unsigned int outputLayerSize = 0;
 	std::vector<HiddenLayer<floatType>> layers;
 	OutputLayer<floatType> outputLayer;
+
+	void trainLayers(vectorReferenceType target);
 
 	unsigned int getLastLayersSize();
 	unsigned int getLastLayersSizeWithBias();
@@ -80,31 +85,22 @@ void NeuralNetwork<floatType>::addHiddenLayer(unsigned int size)
 }
 
 template <class floatType>
-std::vector<floatType> NeuralNetwork<floatType>::guess(std::vector<floatType> input)
+typename NeuralNetwork<floatType>::vectorType NeuralNetwork<floatType>::guess(vectorReferenceType input)
 {
 	assert(input.size() != inputLayerSize, "Wrong number of elements in the Input vector!");
 	checkCompleteSetup();
 
-	std::vector<floatType>
-		results = input;
+	vectorType results = input;
 	for (auto &i : layers)
 		results = i.calculate(results);
 	return outputLayer.calculate(results);
 }
 
 template <class floatType>
-floatType NeuralNetwork<floatType>::train(std::vector<floatType> input, std::vector<floatType> target)
+floatType NeuralNetwork<floatType>::train(vectorReferenceType input, vectorReferenceType target)
 {
 	guess(input);
-	outputLayer.train(target);
-	std::vector<floatType> lastLayersDerivative = outputLayer.derivatives;
-	std::vector<Neuron<floatType>> lastLayersNeurons = outputLayer.neurons;
-	for (auto &i : layers)
-	{
-		i.train(lastLayersDerivative, lastLayersNeurons);
-		lastLayersDerivative = i.derivatives;
-		lastLayersNeurons = i.neurons;
-	}
+	trainLayers(target);
 	return calculateTotalError();
 }
 
@@ -159,5 +155,19 @@ void NeuralNetwork<floatType>::checkCompleteSetup()
 {
 	assert(outputLayerSize == 0, "You have not created an output Layer!");
 	assert(inputLayerSize == 0, "You have not created an input Layer!");
+}
+
+template <class floatType>
+void NeuralNetwork<floatType>::trainLayers(vectorReferenceType target)
+{
+	outputLayer.train(target);
+	vectorType lastLayersDerivative = outputLayer.derivatives;
+	std::vector<Neuron<floatType>> lastLayersNeurons = outputLayer.neurons;
+	for (auto &i : layers)
+	{
+		i.train(lastLayersDerivative, lastLayersNeurons);
+		lastLayersDerivative = i.derivatives;
+		lastLayersNeurons = i.neurons;
+	}
 }
 } // namespace ZNN

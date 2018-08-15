@@ -5,7 +5,7 @@
 #https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #
 #*/
-all: compile_header
+all: test
 
 
 compile_header:
@@ -17,6 +17,7 @@ compile_header:
 	cat ./library/header/normalization.h | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/Layer.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/NeuralNetwork.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/TextProcessor.hpp | grep -v "^#" >> ./build/zeneural.hpp
 
 install: compile_header
 	sudo cp ./build/zeneural.hpp /usr/include/zeneural.hpp
