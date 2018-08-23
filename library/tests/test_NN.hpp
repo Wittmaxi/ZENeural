@@ -6,9 +6,6 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 */
 
-#include "catch.hpp"
-#include "../header/NeuralNetwork.hpp"
-
 TEST_CASE("Neural Network")
 {
 
@@ -194,6 +191,7 @@ TEST_CASE("Neural Network")
             b.setInputLayerSize(2);
             b.setOutputLayerSize(1);
             b.setLearningRate(0.25);
+            b.setNormalization(ZNN::Fermi<double>());
         }
 
         void trainForNIterations(size_t iterations)
@@ -225,16 +223,17 @@ TEST_CASE("Neural Network")
         testTrainWithMultipleLayers()
         {
             withNeuralNetwork();
-            trainForNIterations(500000);
+            trainForNIterations(1000);
             requireCorrectOutputs();
         }
 
         void withNeuralNetwork()
         {
             b.setInputLayerSize(2);
-            b.addHiddenLayer(2);
+            b.addHiddenLayer(50);
             b.setOutputLayerSize(1);
-            b.setLearningRate(0.1);
+            b.setLearningRate(0.7);
+            b.setNormalization(ZNN::Fermi<double>());
         }
 
         void trainForNIterations(size_t iterations)

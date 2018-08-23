@@ -20,11 +20,14 @@ template <class floatType>
 class Neuron
 {
   public:
+	using vectorType = std::vector<floatType>;
+	using vectorReferenceType = const vectorType &;
+
 	Neuron() {}
 	Neuron(unsigned int inputSize);
-	double weightedSum(std::vector<floatType> inputs);
+	floatType weightedSum(vectorType inputs);
 
-	std::vector<floatType> weights;
+	vectorType weights;
 };
 
 template <class floatType>
@@ -34,8 +37,10 @@ class Layer
 	Layer() {}
 	Layer(unsigned int _size, unsigned int _inputSize);
 
-	std::vector<floatType> calculate(std::vector<floatType> inputs);
+	const std::vector<floatType> &calculate(std::vector<floatType> inputs);
 	std::vector<floatType> weightedSum(std::vector<floatType> inputs);
+
+	void changeWeights();
 
 	unsigned int size;
 	unsigned int inputSize;
@@ -57,7 +62,6 @@ class HiddenLayer : public Layer<floatType>
 
 	void train(std::vector<floatType> lastLayersDerivatives, std::vector<Neuron<floatType>> nextLayersNeurons);
 	void calculateDerivatives(std::vector<floatType> nextLayersDerivatives, std::vector<Neuron<floatType>> nextLayersNeurons);
-	void changeWeights();
 };
 
 template <class floatType>
@@ -72,7 +76,6 @@ class OutputLayer : public Layer<floatType>
 
 	void train(std::vector<floatType> newTargets);
 	void calculateDerivatives();
-	void changeWeights();
 	void calculateErrors(std::vector<floatType> newTargets);
 };
 
@@ -83,13 +86,11 @@ Neuron<floatType>::Neuron(unsigned int inputSize)
 }
 
 template <class floatType>
-double Neuron<floatType>::weightedSum(std::vector<floatType> inputs)
+floatType Neuron<floatType>::weightedSum(std::vector<floatType> inputs)
 {
-	double temporaryResult;
+	floatType temporaryResult = 0.0;
 	for (size_t j = 0; j < weights.size(); j++)
-	{
 		temporaryResult += inputs[j] * weights[j];
-	}
 	return temporaryResult;
 }
 
@@ -97,11 +98,11 @@ template <class floatType>
 Layer<floatType>::Layer(unsigned int _size, unsigned int _inputSize)
 	: size(_size), inputSize(_inputSize), neurons(_size, Neuron<floatType>(_inputSize))
 {
-	normalization = Fermi<floatType>();
+	normalization = Identity<floatType>();
 }
 
 template <class floatType>
-std::vector<floatType> Layer<floatType>::calculate(std::vector<floatType> inputs)
+const std::vector<floatType> &Layer<floatType>::calculate(std::vector<floatType> inputs)
 {
 	layerInputValues = inputs;
 	layerInputValues.push_back(1.0);
@@ -115,9 +116,17 @@ std::vector<floatType> Layer<floatType>::weightedSum(std::vector<floatType> inpu
 	std::vector<floatType> temporaryResults;
 
 	for (size_t i = 0; i < neurons.size(); i++)
-		temporaryResults.push_back(normalization.normalization(neurons.at(i).weightedSum(inputs)));
+		temporaryResults.push_back(normalization.normalization(neurons[i].weightedSum(inputs)));
 
-	return temporaryResults;
+	return std::move(temporaryResults);
+}
+
+template <class floatType>
+void Layer<floatType>::changeWeights()
+{
+	for (size_t i = 0; i < this->size; i++)
+		for (size_t j = 0; j < this->inputSize; j++)
+			this->neurons[i].weights[j] -= this->learningRate * this->layerInputValues[j] * this->derivatives[i];
 }
 
 template <class floatType>
@@ -126,7 +135,7 @@ OutputLayer<floatType>::OutputLayer(unsigned int _size, unsigned int _inputSize)
 	this->size = _size;
 	this->inputSize = _inputSize;
 	this->neurons = std::vector<Neuron<floatType>>(_size, Neuron<floatType>(_inputSize));
-	this->normalization = Fermi<floatType>();
+	this->normalization = Identity<floatType>();
 }
 
 template <class floatType>
@@ -134,7 +143,7 @@ void OutputLayer<floatType>::train(std::vector<floatType> newTargets)
 {
 	calculateErrors(newTargets);
 	calculateDerivatives();
-	changeWeights();
+	this->changeWeights();
 }
 
 template <class floatType>
@@ -145,14 +154,6 @@ void OutputLayer<floatType>::calculateDerivatives()
 		temporaryDerivatives.push_back(errors[i] * -1 * this->normalization.derivative(this->layerOutputValues[i]));
 
 	this->derivatives = temporaryDerivatives;
-}
-
-template <class floatType>
-void OutputLayer<floatType>::changeWeights()
-{
-	for (size_t i = 0; i < this->size; i++)
-		for (size_t j = 0; j < this->inputSize; j++)
-			this->neurons[i].weights[j] -= this->learningRate * this->layerInputValues[j] * this->derivatives[i];
 }
 
 template <class floatType>
@@ -171,7 +172,7 @@ HiddenLayer<floatType>::HiddenLayer(unsigned int _size, unsigned int _inputSize)
 	this->size = _size;
 	this->inputSize = _inputSize;
 	this->neurons = std::vector<Neuron<floatType>>(_size, Neuron<floatType>(_inputSize));
-	this->normalization = Fermi<floatType>();
+	this->normalization = Identity<floatType>();
 }
 
 template <class floatType>
@@ -180,27 +181,19 @@ void HiddenLayer<floatType>::calculateDerivatives(std::vector<floatType> nextLay
 	std::vector<floatType> temporaryDerivatives;
 	for (unsigned int i = 0; i < this->size; i++)
 	{
-		double temporaryDerivative;
+		floatType accumulator;
 		for (size_t j = 0; j < nextLayersDerivatives.size(); j++)
-			temporaryDerivative += this->normalization.derivative(this->layerOutputValues[i]) * nextLayersDerivatives[j] * nextLayersNeurons[j].weights[i];
-		temporaryDerivatives.push_back(temporaryDerivative);
+			accumulator += this->normalization.derivative(this->layerOutputValues[i]) * nextLayersDerivatives[j] * nextLayersNeurons[j].weights[i];
+		temporaryDerivatives.push_back(accumulator);
 	}
 	this->derivatives = temporaryDerivatives;
-}
-
-template <class floatType>
-void HiddenLayer<floatType>::changeWeights()
-{
-	for (size_t i = 0; i < this->size; i++)
-		for (size_t j = 0; j < this->inputSize; j++)
-			this->neurons[i].weights[j] -= this->learningRate * this->layerInputValues[j] * this->derivatives[i];
 }
 
 template <class floatType>
 void HiddenLayer<floatType>::train(std::vector<floatType> lastLayersDerivatives, std::vector<Neuron<floatType>> nextLayersNeurons)
 {
 	calculateDerivatives(lastLayersDerivatives, nextLayersNeurons);
-	changeWeights();
+	this->changeWeights();
 }
 
 } // namespace ZNN

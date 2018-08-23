@@ -25,6 +25,9 @@ install: compile_header
 test: 
 	make -C ./library/tests #make the unit tests
 
+full_test:
+	make valgrind -C ./library/tests
+
 debug:
 	g++ ./library/*.cpp -o test -g
 	gdb ./test

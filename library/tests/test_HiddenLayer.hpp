@@ -5,9 +5,6 @@ wittmaxi@linux.pizza
 https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 */
-#include "../header/NeuralNetwork.hpp"
-#include "../header/Layer.hpp"
-#include "catch.hpp"
 
 TEST_CASE("HiddenLayer")
 {

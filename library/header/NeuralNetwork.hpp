@@ -49,7 +49,7 @@ class NeuralNetwork
 	unsigned int getLastLayersSize();
 	unsigned int getLastLayersSizeWithBias();
 
-	double calculateTotalError();
+	floatType calculateTotalError();
 	void constructOutputLayer();
 	void checkCompleteSetup();
 };
@@ -93,7 +93,7 @@ typename NeuralNetwork<floatType>::vectorType NeuralNetwork<floatType>::guess(ve
 	vectorType results = input;
 	for (auto &i : layers)
 		results = i.calculate(results);
-	return outputLayer.calculate(results);
+	return std::move(outputLayer.calculate(results));
 }
 
 template <class floatType>
@@ -136,9 +136,9 @@ unsigned int NeuralNetwork<floatType>::getLastLayersSize()
 }
 
 template <class floatType>
-double NeuralNetwork<floatType>::calculateTotalError()
+floatType NeuralNetwork<floatType>::calculateTotalError()
 {
-	double temporaryError = 0;
+	floatType temporaryError = 0;
 	for (auto i : outputLayer.errors)
 		temporaryError += i * i;
 	return temporaryError / 2;

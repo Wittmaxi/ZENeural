@@ -6,10 +6,6 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 */
 
-#include "../header/NeuralNetwork.hpp"
-#include "../header/Layer.hpp"
-#include "catch.hpp"
-
 TEST_CASE("Layer")
 {
     struct testConstructor : public ZNN::Layer<double>
@@ -29,6 +25,7 @@ TEST_CASE("Layer")
         testCalculate()
         {
             Layer<double> layer(1000, 100);
+            layer.normalization = ZNN::Fermi<double>();
             std::vector<double> inputs(999, 100);
             std::vector<double> outputs = layer.calculate(inputs);
             CHECK(outputs.size() == 1000);

@@ -6,10 +6,6 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 */
 
-#include "../header/NeuralNetwork.hpp"
-#include "../header/Layer.hpp"
-#include "catch.hpp"
-
 TEST_CASE("OutputLayer")
 {
     struct testConstructor : public ZNN::OutputLayer<double>
