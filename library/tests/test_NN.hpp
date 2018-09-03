@@ -6,6 +6,8 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 */
 
+#include <fenv.h>
+
 TEST_CASE("Neural Network")
 {
 
@@ -59,6 +61,30 @@ TEST_CASE("Neural Network")
             {
                 CHECK(i.size == hiddenLayerSize);
             }
+        }
+    };
+
+    struct testGoodNumberNeuronsWeights : public ZNN::NeuralNetwork<double>
+    {
+        testGoodNumberNeuronsWeights()
+        {
+            withHiddenLayers();
+            requireCorrectNumberNeuronsWeights();
+        }
+
+        void withHiddenLayers()
+        {
+            setInputLayerSize(1);
+            addHiddenLayer(10);
+            addHiddenLayer(3);
+            addHiddenLayer(5);
+        }
+
+        void requireCorrectNumberNeuronsWeights()
+        {
+            CHECK(this->layers[0].neurons[0].weights.size() == 1 + 1);
+            CHECK(this->layers[1].neurons[0].weights.size() == 10 + 1);
+            CHECK(this->layers[2].neurons[0].weights.size() == 3 + 1);
         }
     };
 
@@ -215,48 +241,6 @@ TEST_CASE("Neural Network")
         }
     };
 
-    struct testTrainWithMultipleLayers : public ZNN::NeuralNetwork<double>
-    {
-        ZNN::NeuralNetwork<double> b;
-        std::vector<std::vector<double>> input{{1, 0}, {0, 1}, {0, 0}, {1, 1}};
-        std::vector<std::vector<double>> target{{1}, {1}, {0}, {0}};
-        testTrainWithMultipleLayers()
-        {
-            withNeuralNetwork();
-            trainForNIterations(1000);
-            requireCorrectOutputs();
-        }
-
-        void withNeuralNetwork()
-        {
-            b.setInputLayerSize(2);
-            b.addHiddenLayer(50);
-            b.setOutputLayerSize(1);
-            b.setLearningRate(0.7);
-            b.setNormalization(ZNN::Fermi<double>());
-        }
-
-        void trainForNIterations(size_t iterations)
-        {
-            for (size_t i = 0; i < iterations; i++)
-            {
-                b.train(input[0], target[0]);
-                b.train(input[1], target[1]);
-                b.train(input[2], target[2]);
-                b.train(input[3], target[3]);
-            }
-        }
-
-        void requireCorrectOutputs()
-        {
-            //artificially add one so the epsilon works better
-            CHECK(Approx(b.guess(input[0])[0] + 1).epsilon(0.15) == target[0][0] + 1);
-            CHECK(Approx(b.guess(input[1])[0] + 1).epsilon(0.15) == target[1][0] + 1);
-            CHECK(Approx(b.guess(input[2])[0] + 1).epsilon(0.15) == target[2][0] + 1);
-            CHECK(Approx(b.guess(input[3])[0] + 1).epsilon(0.15) == target[3][0] + 1);
-        }
-    };
-
     testSetInputLayerSize();
     testSetOutputLayerSize();
     testAddHiddenLayer();
@@ -266,5 +250,5 @@ TEST_CASE("Neural Network")
     testGetLastLayersSizeWithBias();
     testCalculateTotalError();
     testTrain();
-    testTrainWithMultipleLayers();
+    testGoodNumberNeuronsWeights();
 }

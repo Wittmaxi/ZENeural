@@ -7,13 +7,10 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 */
 
 #pragma once
-#include <vector>
-#include <string>
-#include <math.h>
+#include "includes.h"
 #include "Layer.hpp"
-#include "normalization.h"
-#include "util/assert.h"
-#include <iostream>
+#include "normalization.hpp"
+#include "util/assert.hpp"
 
 namespace ZNN
 {
@@ -32,7 +29,7 @@ class NeuralNetwork
 	floatType train(vectorReferenceType input, vectorReferenceType target);
 
 	void setLearningRate(floatType learningRate);
-	void setNormalization(Normalization<floatType> normalizationObject);
+	void setNormalization(const Normalization<floatType> &normalizationObject);
 
 	std::string saveToString();					   //TODO
 	void loadFromString(std::string objectString); //TODO
@@ -57,8 +54,8 @@ class NeuralNetwork
 template <class floatType>
 void NeuralNetwork<floatType>::setInputLayerSize(unsigned int size)
 {
-	assert(inputLayerSize != 0, "You cannot set the size of the Input layer twice");
-	assert(size == 0, "You cannot set an input layer's size to a value smaler than 1");
+	UTIL::assert(inputLayerSize != 0, "You cannot set the size of the Input layer twice");
+	UTIL::assert(size == 0, "You cannot set an input layer's size to a value smaler than 1");
 
 	inputLayerSize = size;
 }
@@ -66,9 +63,9 @@ void NeuralNetwork<floatType>::setInputLayerSize(unsigned int size)
 template <class floatType>
 void NeuralNetwork<floatType>::setOutputLayerSize(unsigned int size)
 {
-	assert(outputLayerSize != 0, "You cannot set the size of the Output layer twice");
-	assert(size == 0, "You cannot set an output layer's size to a value smaller than 1");
-	assert(inputLayerSize == 0, "You have to create atleast an input layer before creating an Output layer");
+	UTIL::assert(outputLayerSize != 0, "You cannot set the size of the Output layer twice");
+	UTIL::assert(size == 0, "You cannot set an output layer's size to a value smaller than 1");
+	UTIL::assert(inputLayerSize == 0, "You have to create atleast an input layer before creating an Output layer");
 
 	outputLayerSize = size;
 	constructOutputLayer();
@@ -77,9 +74,9 @@ void NeuralNetwork<floatType>::setOutputLayerSize(unsigned int size)
 template <class floatType>
 void NeuralNetwork<floatType>::addHiddenLayer(unsigned int size)
 {
-	assert(inputLayerSize == 0, "You have to create atleast an input layer before creating an Output layer");
-	assert(size == 0, "You cannot set an hidden layer's size to a value smaller than 1");
-	assert(outputLayerSize != 0, "You cannot create hidden Layers behind of the Output Layer");
+	UTIL::assert(inputLayerSize == 0, "You have to create atleast an input layer before creating an Output layer");
+	UTIL::assert(size == 0, "You cannot set an hidden layer's size to a value smaller than 1");
+	UTIL::assert(outputLayerSize != 0, "You cannot create hidden Layers behind of the Output Layer");
 
 	layers.push_back(HiddenLayer<floatType>(size, getLastLayersSizeWithBias()));
 }
@@ -87,7 +84,7 @@ void NeuralNetwork<floatType>::addHiddenLayer(unsigned int size)
 template <class floatType>
 typename NeuralNetwork<floatType>::vectorType NeuralNetwork<floatType>::guess(vectorReferenceType input)
 {
-	assert(input.size() != inputLayerSize, "Wrong number of elements in the Input vector!");
+	UTIL::assert(input.size() != inputLayerSize, "Wrong number of elements in the Input vector!");
 	checkCompleteSetup();
 
 	vectorType results = input;
@@ -113,7 +110,7 @@ void NeuralNetwork<floatType>::setLearningRate(floatType learningRate)
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::setNormalization(Normalization<floatType> normalizationObject)
+void NeuralNetwork<floatType>::setNormalization(const Normalization<floatType> &normalizationObject)
 {
 	for (auto &i : layers)
 		i.normalization = normalizationObject;
@@ -153,8 +150,8 @@ void NeuralNetwork<floatType>::constructOutputLayer()
 template <class floatType>
 void NeuralNetwork<floatType>::checkCompleteSetup()
 {
-	assert(outputLayerSize == 0, "You have not created an output Layer!");
-	assert(inputLayerSize == 0, "You have not created an input Layer!");
+	UTIL::assert(outputLayerSize == 0, "You have not created an output Layer!");
+	UTIL::assert(inputLayerSize == 0, "You have not created an input Layer!");
 }
 
 template <class floatType>
@@ -170,4 +167,5 @@ void NeuralNetwork<floatType>::trainLayers(vectorReferenceType target)
 		lastLayersNeurons = i.neurons;
 	}
 }
+
 } // namespace ZNN

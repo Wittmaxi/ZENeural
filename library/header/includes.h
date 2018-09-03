@@ -12,3 +12,6 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include <math.h>
 #include <string>
 #include <iostream>
+#include <algorithm>
+#include <array>
+#include <thread>

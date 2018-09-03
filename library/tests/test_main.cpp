@@ -8,7 +8,6 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 #define CATCH_CONFIG_MAIN
 #define CATCH_CONFIG_FAST_COMPILE
-#define CATCH_CONFIG_DISABLE_STRINGIFICATION
 #define CATCH_CONFIG_DISABLE_MATCHERS
 #include "../header/NeuralNetwork.hpp"
 #include "../header/Layer.hpp"
@@ -19,3 +18,5 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include "test_Neuron.hpp"
 #include "test_OutputLayer.hpp"
 #include "test_NN.hpp"
+#include "test_Threadpool.hpp"
+#include "test_to_stringOverloads.hpp"
