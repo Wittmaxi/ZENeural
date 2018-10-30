@@ -19,4 +19,5 @@ The entire library will be kept backwards compatible, code quality will be ensur
 # Getting Started
 
 [Tutorial <work In progress>](https://github.com/Wittmaxi/ZENeural/wiki/Tutorial---%231-Basic-usage-of-the-Neural-Network)
+  <br>
 [Class Synopsis <work in progress>]()
