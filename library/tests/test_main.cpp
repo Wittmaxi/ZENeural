@@ -11,12 +11,11 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #define CATCH_CONFIG_DISABLE_MATCHERS
 #include "../header/NeuralNetwork.hpp"
 #include "../header/Layer.hpp"
-#include "catch.hpp"
+#include "../header/typedefs.hpp"
+#include "../external/catch.hpp"
 
 #include "test_Layer.hpp"
 #include "test_HiddenLayer.hpp"
 #include "test_Neuron.hpp"
 #include "test_OutputLayer.hpp"
 #include "test_NN.hpp"
-#include "test_Threadpool.hpp"
-#include "test_to_stringOverloads.hpp"

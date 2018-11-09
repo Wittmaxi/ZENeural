@@ -5,3 +5,5 @@
 library/NN
 build/zeneural.hpp
 build/*
+/library/external
+library/tests/test

@@ -19,7 +19,8 @@ compile_header:
 	cat ./library/header/normalization.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/Layer.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/NeuralNetwork.hpp | grep -v "^#" >> ./build/zeneural.hpp
-	cat ./library/header/TextProcessor.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	
+	cat ./library/header/typedefs.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	echo "#endif" >> ./build/zeneural.hpp
 
 install: compile_header

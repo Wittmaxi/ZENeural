@@ -7,6 +7,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 */
 
 #pragma once
+
 #include "includes.h"
 #include "Layer.hpp"
 #include "normalization.hpp"
@@ -15,23 +16,20 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 namespace ZNN
 {
 template <class floatType = double>
-class NeuralNetwork
+class FeedForwardNeuralNetwork
 {
   public:
-	using vectorType = std::vector<floatType>;
-	using vectorReferenceType = const vectorType &;
-
 	void setInputLayerSize(unsigned int size);
 	void setOutputLayerSize(unsigned int size);
 	void addHiddenLayer(unsigned int layerSize);
 
-	vectorType guess(vectorReferenceType input);
-	floatType train(vectorReferenceType input, vectorReferenceType target);
+	std::vector<floatType> guess(const std::vector<floatType>& input);
+	floatType train(std::vector<floatType>& input, std::vector<floatType>& target);
 
 	void setLearningRate(floatType learningRate);
 	void setNormalization(const Normalization<floatType> &normalizationObject);
 
-	std::string saveToString();					   //TODO
+	std::string saveToString();
 	void loadFromString(std::string objectString); //TODO
 
   protected:
@@ -41,7 +39,7 @@ class NeuralNetwork
 	std::vector<HiddenLayer<floatType>> layers;
 	OutputLayer<floatType> outputLayer;
 
-	void trainLayers(vectorReferenceType target);
+	void trainLayers(std::vector<floatType>& target);
 
 	unsigned int getLastLayersSize();
 	unsigned int getLastLayersSizeWithBias();
@@ -52,7 +50,7 @@ class NeuralNetwork
 };
 
 template <class floatType>
-void NeuralNetwork<floatType>::setInputLayerSize(unsigned int size)
+void FeedForwardNeuralNetwork<floatType>::setInputLayerSize(unsigned int size)
 {
 	UTIL::assert(inputLayerSize != 0, "You cannot set the size of the Input layer twice");
 	UTIL::assert(size == 0, "You cannot set an input layer's size to a value smaler than 1");
@@ -61,7 +59,7 @@ void NeuralNetwork<floatType>::setInputLayerSize(unsigned int size)
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::setOutputLayerSize(unsigned int size)
+void FeedForwardNeuralNetwork<floatType>::setOutputLayerSize(unsigned int size)
 {
 	UTIL::assert(outputLayerSize != 0, "You cannot set the size of the Output layer twice");
 	UTIL::assert(size == 0, "You cannot set an output layer's size to a value smaller than 1");
@@ -72,7 +70,7 @@ void NeuralNetwork<floatType>::setOutputLayerSize(unsigned int size)
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::addHiddenLayer(unsigned int size)
+void FeedForwardNeuralNetwork<floatType>::addHiddenLayer(unsigned int size)
 {
 	UTIL::assert(inputLayerSize == 0, "You have to create atleast an input layer before creating an Output layer");
 	UTIL::assert(size == 0, "You cannot set an hidden layer's size to a value smaller than 1");
@@ -82,19 +80,19 @@ void NeuralNetwork<floatType>::addHiddenLayer(unsigned int size)
 }
 
 template <class floatType>
-typename NeuralNetwork<floatType>::vectorType NeuralNetwork<floatType>::guess(vectorReferenceType input)
+std::vector<floatType> FeedForwardNeuralNetwork<floatType>::guess(const std::vector<floatType>& input)
 {
 	UTIL::assert(input.size() != inputLayerSize, "Wrong number of elements in the Input vector!");
 	checkCompleteSetup();
 
-	vectorType results = input;
+	std::vector<floatType> results = input;
 	for (auto &i : layers)
 		results = i.calculate(results);
-	return std::move(outputLayer.calculate(results));
+	return outputLayer.calculate(results);
 }
 
 template <class floatType>
-floatType NeuralNetwork<floatType>::train(vectorReferenceType input, vectorReferenceType target)
+floatType FeedForwardNeuralNetwork<floatType>::train(std::vector<floatType>& input, std::vector<floatType>& target)
 {
 	guess(input);
 	trainLayers(target);
@@ -102,7 +100,7 @@ floatType NeuralNetwork<floatType>::train(vectorReferenceType input, vectorRefer
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::setLearningRate(floatType learningRate)
+void FeedForwardNeuralNetwork<floatType>::setLearningRate(floatType learningRate)
 {
 	for (auto &i : layers)
 		i.learningRate = learningRate;
@@ -110,7 +108,7 @@ void NeuralNetwork<floatType>::setLearningRate(floatType learningRate)
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::setNormalization(const Normalization<floatType> &normalizationObject)
+void FeedForwardNeuralNetwork<floatType>::setNormalization(const Normalization<floatType> &normalizationObject)
 {
 	for (auto &i : layers)
 		i.normalization = normalizationObject;
@@ -118,13 +116,13 @@ void NeuralNetwork<floatType>::setNormalization(const Normalization<floatType> &
 }
 
 template <class floatType>
-unsigned int NeuralNetwork<floatType>::getLastLayersSizeWithBias()
+unsigned int FeedForwardNeuralNetwork<floatType>::getLastLayersSizeWithBias()
 {
 	return getLastLayersSize() + 1;
 }
 
 template <class floatType>
-unsigned int NeuralNetwork<floatType>::getLastLayersSize()
+unsigned int FeedForwardNeuralNetwork<floatType>::getLastLayersSize()
 {
 	unsigned int lastLayersSize = inputLayerSize;
 	if (layers.size() > 0)
@@ -133,7 +131,7 @@ unsigned int NeuralNetwork<floatType>::getLastLayersSize()
 }
 
 template <class floatType>
-floatType NeuralNetwork<floatType>::calculateTotalError()
+floatType FeedForwardNeuralNetwork<floatType>::calculateTotalError()
 {
 	floatType temporaryError = 0;
 	for (auto i : outputLayer.errors)
@@ -142,23 +140,23 @@ floatType NeuralNetwork<floatType>::calculateTotalError()
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::constructOutputLayer()
+void FeedForwardNeuralNetwork<floatType>::constructOutputLayer()
 {
 	outputLayer = OutputLayer<floatType>(outputLayerSize, getLastLayersSizeWithBias());
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::checkCompleteSetup()
+void FeedForwardNeuralNetwork<floatType>::checkCompleteSetup()
 {
 	UTIL::assert(outputLayerSize == 0, "You have not created an output Layer!");
 	UTIL::assert(inputLayerSize == 0, "You have not created an input Layer!");
 }
 
 template <class floatType>
-void NeuralNetwork<floatType>::trainLayers(vectorReferenceType target)
+void FeedForwardNeuralNetwork<floatType>::trainLayers(std::vector<floatType>& target)
 {
 	outputLayer.train(target);
-	vectorType lastLayersDerivative = outputLayer.derivatives;
+	std::vector<floatType> lastLayersDerivative = outputLayer.derivatives;
 	std::vector<Neuron<floatType>> lastLayersNeurons = outputLayer.neurons;
 	for (auto &i : layers)
 	{
@@ -167,5 +165,4 @@ void NeuralNetwork<floatType>::trainLayers(vectorReferenceType target)
 		lastLayersNeurons = i.neurons;
 	}
 }
-
 } // namespace ZNN
