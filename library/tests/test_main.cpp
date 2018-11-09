@@ -12,6 +12,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include "../header/NeuralNetwork.hpp"
 #include "../header/Layer.hpp"
 #include "../header/typedefs.hpp"
+#include "../header/VanillaRecurrentNetwork.hpp"
 #include "../external/catch.hpp"
 
 #include "test_Layer.hpp"
@@ -19,3 +20,4 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include "test_Neuron.hpp"
 #include "test_OutputLayer.hpp"
 #include "test_NN.hpp"
+#include "test_VRNN.hpp"
