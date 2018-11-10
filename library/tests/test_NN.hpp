@@ -241,28 +241,6 @@ TEST_CASE("Neural Network")
         }
     };
 
-    struct testSaveToStringBase{};
-    // {
-    //     ZNN::NeuralNetwork<float> NN;
-    //     testSaveToStringBase()
-    //     {
-    //         withNeuralNetwork();
-    //         requireNonemptyString();
-    //     }
-
-    //     void withNeuralNetwork()
-    //     {
-    //         NN.setInputLayerSize(10);
-    //         NN.addHiddenLayer(100);
-    //         NN.addHiddenLayer(20);
-    //         NN.setOutputLayerSize(2);
-    //     }
-
-    //     void requireNonemptyString()
-    //     {
-    //         CHECK(NN.saveToString() != "");
-    //     }
-    // };
 
     testSetInputLayerSize();
     testSetOutputLayerSize();
@@ -274,5 +252,4 @@ TEST_CASE("Neural Network")
     testCalculateTotalError();
     testTrain();
     testGoodNumberNeuronsWeights();
-    testSaveToStringBase();
 }

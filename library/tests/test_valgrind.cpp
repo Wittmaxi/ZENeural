@@ -32,7 +32,38 @@ struct testTrainWithMultipleLayers : public ZNN::NeuralNetwork<double>
     }
 };
 
+void testVRNN()
+{
+    ZNN::VRNN<double> textCreator;
+    textCreator.setInputLayerSize(4);
+    textCreator.addHiddenLayer(50);
+    textCreator.addHiddenLayer(50);
+    textCreator.setOutputLayerSize(4);
+    textCreator.setNormalization(ZNN::Fermi<double>());
+    textCreator.setLearningRate(0.1);
+    std::vector<std::vector<double>> dictionary {{1, 0, 0, 0},
+                                                 {0, 1, 0, 0},
+                                                 {0, 0, 1, 0},
+                                                 {0, 0, 0, 1},
+                                                 {0, 0, 0, 0}};
+    for (int i = 0; i < 1000000; i++)
+    {
+        textCreator.train(dictionary[0], dictionary[1]);
+        textCreator.train(dictionary[4], dictionary[2]);
+        textCreator.train(dictionary[4], dictionary[3]);
+        textCreator.train(dictionary[4], dictionary[3]);
+        textCreator.train(dictionary[4], dictionary[4]);
+        textCreator.clearStates();
+    }
+    std::cout << textCreator.guess(dictionary[0]);
+    std::cout << textCreator.guess(dictionary[4]);
+    std::cout << textCreator.guess(dictionary[4]);
+    std::cout << textCreator.guess(dictionary[4]);
+    std::cout << textCreator.guess(dictionary[4]);
+}
+
 int main()
 {
     testTrainWithMultipleLayers();
+    testVRNN();
 }
