@@ -21,3 +21,6 @@ The entire library will be kept backwards compatible, code quality will be ensur
 [Tutorial <work In progress>](https://github.com/Wittmaxi/ZENeural/wiki/Tutorial---%231-Basic-usage-of-the-Neural-Network)
   <br>
 [Class Synopsis <work in progress>]()
+
+# Compiling the unit tests
+In order to compile the unit tests, you will have to download catch.hpp and change the include in test_main.cpp. It was removed from ZENeural because of it's sticky license.
