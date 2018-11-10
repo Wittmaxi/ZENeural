@@ -33,4 +33,17 @@ void VanillaRecurrentNeuralNetwork<floatType>::clearStates () {
         for (auto &outputValue : layer.layerOutputValues)
             outputValue = 0;
 }
+
+template<class floatType>
+std::vector<floatType> VanillaRecurrentNeuralNetwork<floatType>::guess (const std::vector<floatType>& input) {
+	UTIL::assert(input.size() != this->inputLayerSize, "Wrong number of elements in the Input vector!");
+	this->checkCompleteSetup();
+
+    std::vector<floatType> results = input;
+	for (auto &i : this->layers) {
+        results.insert(results.end(), i.layerOutputValues.begin(), i.layerOutputValues.end());
+		results = i.calculate(results);
+    }
+	return this->outputLayer.calculate(results);
+}
 }

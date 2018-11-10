@@ -26,6 +26,16 @@ TEST_CASE("Vanilla Recurrent Neural Network")
         }
     };
 
+    struct testGuess : public ZNN::VRNN <double>{
+        testGuess () {
+            setInputLayerSize(1);
+            addHiddenLayer(3);
+            setOutputLayerSize(1);
+            CHECK (guess ({1}).size() == 1);;
+        }
+    };
+
     testAddHiddenLayer();
     testClearStates();
+    testGuess();
 }
