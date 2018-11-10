@@ -16,5 +16,16 @@ TEST_CASE("Vanilla Recurrent Neural Network")
         }
     };
 
+    struct testClearStates : public ZNN::VRNN <double>{
+        testClearStates () {
+            setInputLayerSize(1);
+            addHiddenLayer(3);
+            layers[0].layerOutputValues = std::vector <double> {1, 2, 3};
+            clearStates();
+            CHECK (layers[0].layerOutputValues == std::vector<double>{0, 0, 0});
+        }
+    };
+
     testAddHiddenLayer();
+    testClearStates();
 }

@@ -26,4 +26,11 @@ void VanillaRecurrentNeuralNetwork<floatType>::addHiddenLayer(unsigned layerSize
 
 	this->layers.push_back(HiddenLayer<floatType>(layerSize, this->getLastLayersSizeWithBias() + layerSize));
 }
+
+template<class floatType>
+void VanillaRecurrentNeuralNetwork<floatType>::clearStates () {
+    for (auto &layer : this->layers)
+        for (auto &outputValue : layer.layerOutputValues)
+            outputValue = 0;
+}
 }
