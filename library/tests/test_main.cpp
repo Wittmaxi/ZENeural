@@ -11,8 +11,8 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #define CATCH_CONFIG_DISABLE_MATCHERS
 #include "../header/NeuralNetwork.hpp"
 #include "../header/Layer.hpp"
-#include "../header/typedefs.hpp"
 #include "../header/VanillaRecurrentNetwork.hpp"
+#include "../header/typedefs.hpp"
 #include "../external/catch.hpp"
 
 #include "test_Layer.hpp"
