@@ -12,7 +12,7 @@ template <class floatType>
 class Neuron
 {
   public:
-	Neuron(unsigned int inputSize);
+	explicit Neuron(unsigned int inputSize);
 	floatType weightedSum(std::vector<floatType> inputs);
 
 	std::vector<floatType> weights;

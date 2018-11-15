@@ -18,7 +18,7 @@ public:
     floatType guess (std::vector<floatType> input);
     floatType train (std::vector<floatType> input, floatType target);
 
-    void setNormalization (Normalization<floatType> norm);
+    void setNormalization (const Normalization<floatType> &norm);
     void setLearningRate (floatType lr);
 protected:
     floatType calculateError (floatType result, floatType target);
@@ -52,7 +52,7 @@ floatType Perceptron<floatType>::calculateError (floatType result, floatType tar
 }
 
 template<class floatType>
-void Perceptron<floatType>::setNormalization (Normalization<floatType> norm) {
+void Perceptron<floatType>::setNormalization (const Normalization<floatType> &norm) {
     normalization = norm;
 }
 

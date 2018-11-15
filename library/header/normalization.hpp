@@ -16,7 +16,7 @@ template <class floatType>
 struct Normalization
 {
 	Normalization(){};
-	Normalization(std::function<floatType(floatType)> norm, std::function<floatType(floatType)> der) : normalization(norm), derivative(der){};
+	Normalization(std::function<floatType(floatType)> &norm, std::function<floatType(floatType)> &der) : normalization(norm), derivative(der){};
 	std::function<floatType(floatType)> normalization;
 	std::function<floatType(floatType)> derivative;
 };
