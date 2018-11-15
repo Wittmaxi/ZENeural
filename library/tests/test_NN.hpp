@@ -118,7 +118,7 @@ TEST_CASE("Neural Network")
             {
                 return guess(std::vector<double>(inputSize, 0));
             }
-            catch (std::exception &e)
+            catch (const std::exception &e)
             {
                 CHECK(false);
             }
