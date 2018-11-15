@@ -15,7 +15,7 @@ namespace ZNN
 namespace UTIL
 {
 
-inline void assert(bool isTrue, const std::string message)
+inline void assert(bool isTrue, const std::string& message)
 {
     if (isTrue)
     {
