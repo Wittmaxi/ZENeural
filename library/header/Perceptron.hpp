@@ -14,7 +14,7 @@ namespace ZNN {
 template<class floatType>
 class Perceptron {
 public:
-    Perceptron(unsigned int inputs);
+    explicit Perceptron(unsigned int inputs);
     floatType guess (std::vector<floatType> input);
     floatType train (std::vector<floatType> input, floatType target);
 
