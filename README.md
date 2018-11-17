@@ -1,4 +1,7 @@
 # ZENeural
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e12c98244f2f45f49d266d91a00e0e7e)](https://app.codacy.com/app/Wittmaxi/ZENeural?utm_source=github.com&utm_medium=referral&utm_content=Wittmaxi/ZENeural&utm_campaign=Badge_Grade_Dashboard)
+
 The goal of ZENeural is to be a multi-purpose Machine Learning library.
 It is Licensed under the Boost Software License.
 
