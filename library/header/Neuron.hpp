@@ -7,6 +7,9 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 */
 
 #pragma once
+#include <string>
+#include <string_view>
+
 namespace ZNN {
 template <class floatType>
 class Neuron
@@ -21,11 +24,12 @@ class Neuron
 };
 
 template<class floatType>
-std::string getAsString () {
-	std::stringstream temp;
-	for (const auto& i : weights)
-		temp << i << "|";
-	return temp.str();
+std::string Neuron<floatType>::getAsString () {
+	std::string temp;
+	for (const auto& weight : weights)
+		for (size_t readPos = 0; readPos < sizeof (floatType); readPos++)
+			temp += std::string (1, reinterpret_cast<const char*> (&weight)[readPos]);
+	return temp;
 }
 
 template <class floatType>

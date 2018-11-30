@@ -17,6 +17,15 @@ TEST_CASE("Neuron")
         }
     };
 
+    struct testGetAsString
+    {
+        testGetAsString()
+        {
+            ZNN::Neuron<double> neuron(1000);
+            CHECK(neuron.getAsString().size() == 1000 * sizeof (double));
+        }
+    };
+
     struct testWeightedSum
     {
         testWeightedSum()
@@ -31,4 +40,5 @@ TEST_CASE("Neuron")
 
     testConstructor();
     testWeightedSum();
+    testGetAsString();
 }
