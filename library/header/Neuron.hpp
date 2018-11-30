@@ -15,9 +15,18 @@ class Neuron
 	explicit Neuron(unsigned int inputSize);
 	floatType weightedSum(std::vector<floatType> inputs);
 
+	std::string getAsString();
+
 	std::vector<floatType> weights;
 };
 
+template<class floatType>
+std::string getAsString () {
+	std::stringstream temp;
+	for (const auto& i : weights)
+		temp << i << "|";
+	return temp.str();
+}
 
 template <class floatType>
 Neuron<floatType>::Neuron(unsigned int inputSize)

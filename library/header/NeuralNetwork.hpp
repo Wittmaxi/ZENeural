@@ -29,8 +29,8 @@ class FeedForwardNeuralNetwork
 	void setLearningRate(floatType learningRate);
 	void setNormalization(const Normalization<floatType> &normalizationObject);
 
-	std::string saveToString();
-	void loadFromString(std::string objectString); //TODO
+	std::string getAsString();
+	void loadFromString(const std::string& objectString); //TODO
 
   protected:
 	unsigned int trainingIterations = 0;

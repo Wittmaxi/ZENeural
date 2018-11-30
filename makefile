@@ -10,12 +10,11 @@ all: test
 
 compile_header:
 	-mkdir ./build
-	echo "" > ./build/zeneural.hpp
-	cat ./library/header/includes.h > ./build/zeneural.hpp
-	echo "" >> ./build/zeneural.hpp
 	echo "#ifndef zeneural_included_" >> ./build/zeneural.hpp
 	echo "#define zeneural_inlcuded_" >> ./build/zeneural.hpp
+	cat ./library/header/includes.h > ./build/zeneural.hpp
 	cat ./library/header/util/assert.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/util/numbers.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/normalization.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/Layer.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/NeuralNetwork.hpp | grep -v "^#" >> ./build/zeneural.hpp
