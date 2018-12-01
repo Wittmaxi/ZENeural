@@ -15,3 +15,5 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include <algorithm>
 #include <array>
 #include <thread>
+#include <iomanip>
+#include <sstream>

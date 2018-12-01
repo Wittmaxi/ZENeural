@@ -97,6 +97,8 @@ void Layer<floatType>::loadFromString(std::string string)
 		}
 		else
 			temp += i;
+	size = neurons.size();
+	inputSize = neurons[0].weights.size();
 }
 
 template <class floatType>

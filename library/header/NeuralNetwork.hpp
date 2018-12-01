@@ -29,8 +29,8 @@ class FeedForwardNeuralNetwork
 	void setLearningRate(floatType learningRate);
 	void setNormalization(const Normalization<floatType> &normalizationObject);
 
-	std::string getAsString();
-	void loadFromString(const std::string& objectString); //TODO
+	std::string getAsString() const;
+	void loadFromString(std::string string); //TODO
 
   protected:
 	unsigned int trainingIterations = 0;
@@ -164,5 +164,38 @@ void FeedForwardNeuralNetwork<floatType>::trainLayers(std::vector<floatType>& ta
 		lastLayersDerivative = i.derivatives;
 		lastLayersNeurons = i.neurons;
 	}
+}
+
+template <class floatType>
+std::string FeedForwardNeuralNetwork<floatType>::getAsString() const
+{
+	std::string temp;
+	temp += Serializer<unsigned int>{}.serialize(inputLayerSize) + ">";
+	for (const auto &i : layers)
+		temp += i.getAsString() + "}";
+	temp += ";" + outputLayer.getAsString();
+	return temp;
+}
+
+template<class floatType>
+void FeedForwardNeuralNetwork<floatType>::loadFromString(std::string string) {
+	std::string temp;
+	layers.resize(0);
+	for (const auto i : string)
+		if (i == '}') {
+			HiddenLayer<floatType> templ(0, 0);
+			templ.loadFromString(temp);
+			layers.push_back(templ);
+			temp = "";
+		} else if (i == '>') {
+			setInputLayerSize(Serializer<unsigned int>{}.deserialize(temp));
+			temp = "";
+		} else if (i == ';')
+			break;
+		else
+			temp += i;
+	outputLayer = OutputLayer<floatType>(0,0);
+	outputLayer.loadFromString(std::string (std::find (string.begin(), string.end(), ';') + 1, string.end()));
+	outputLayerSize = outputLayer.neurons.size();
 }
 } // namespace ZNN

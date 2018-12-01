@@ -7,8 +7,6 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 */
 
 #define CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_FAST_COMPILE
-#define CATCH_CONFIG_DISABLE_MATCHERS
 #include "../header/NeuralNetwork.hpp"
 #include "../header/Layer.hpp"
 #include "../header/VanillaRecurrentNetwork.hpp"

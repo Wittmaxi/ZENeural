@@ -77,6 +77,25 @@ TEST_CASE("Numbers")
         }
     };
 
+    struct testUIntSerializerSerialize {
+        testUIntSerializerSerialize() {
+            CHECK (ZNN::Serializer<unsigned int>{}.serialize(123) == "123");
+            CHECK (ZNN::Serializer<unsigned int>{}.serialize(12345) == "12345");
+        }
+    };
+    struct testUIntSerializerDeserialize {
+        testUIntSerializerDeserialize() {
+            CHECK (ZNN::Serializer<unsigned int>{}.deserialize("12341233") == 12341233);
+            CHECK (ZNN::Serializer<unsigned int>{}.deserialize("123") == 123);
+        }
+    };
+    struct testUIntSerializer {
+        testUIntSerializer() {
+            CHECK (ZNN::Serializer<unsigned int>{}.deserialize(ZNN::Serializer <unsigned int>{}.serialize(ZNN::Serializer<unsigned int>{}.deserialize("123"))) == 123);
+            CHECK (ZNN::Serializer<unsigned int>{}.deserialize(ZNN::Serializer <unsigned int>{}.serialize(ZNN::Serializer<unsigned int>{}.deserialize("12341234"))) == 12341234);
+        }
+    };
+
     testFloatSerializerDeserialize();
     testFloatSerializerDeserialize();
     testFloatSerializer();
@@ -85,5 +104,8 @@ TEST_CASE("Numbers")
     testDoubleSerializer();
     testLongDoubleSerializerDeserialize();
     testLongDoubleSerializerDeserialize();
-    testLongDoubleSerializer();
+    testLongDoubleSerializerDeserialize();
+    testUIntSerializerDeserialize();
+    testUIntSerializer();
+    testUIntSerializer();
 }
