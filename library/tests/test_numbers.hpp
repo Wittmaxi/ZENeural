@@ -55,10 +55,35 @@ TEST_CASE("Numbers")
         }
     };
 
+    struct testLongDoubleSerializerSerialize {
+        testLongDoubleSerializerSerialize() {
+            CHECK (ZNN::Serializer<long double>{}.serialize(3.1415).substr (0, 4) == "3.14");
+            CHECK (ZNN::Serializer<long double>{}.serialize(-3.1415).substr (0, 5) == "-3.14");
+            CHECK (ZNN::Serializer<long double>{}.serialize(3.14159261).substr (0, 6) == "3.1415");
+        }
+    };
+    struct testLongDoubleSerializerDeserialize {
+        testLongDoubleSerializerDeserialize() {
+            CHECK (ZNN::Serializer<long double>{}.deserialize("3.1415") == Approx (3.14).epsilon (0.3));
+            CHECK (ZNN::Serializer<long double>{}.deserialize("-3.1415") == Approx (-3.14).epsilon (0.3));
+            CHECK (ZNN::Serializer<long double>{}.deserialize("3.14159261") == Approx (3.1415).epsilon (0.3));
+        }
+    };
+    struct testLongDoubleSerializer {
+        testLongDoubleSerializer() {
+            CHECK (ZNN::Serializer<long double>{}.deserialize(ZNN::Serializer <long double>{}.serialize(ZNN::Serializer<long double>{}.deserialize("3.1415"))) == Approx (3.1415).epsilon (0.3));
+            CHECK (ZNN::Serializer<long double>{}.deserialize(ZNN::Serializer <long double>{}.serialize(ZNN::Serializer<long double>{}.deserialize("-3.1415"))) == Approx (-3.1415).epsilon (0.3));
+            CHECK (ZNN::Serializer<long double>{}.deserialize(ZNN::Serializer <long double>{}.serialize(ZNN::Serializer<long double>{}.deserialize("3.141592"))) == Approx (3.141592).epsilon (0.3));
+        }
+    };
+
     testFloatSerializerDeserialize();
     testFloatSerializerDeserialize();
     testFloatSerializer();
     testDoubleSerializerDeserialize();
     testDoubleSerializerDeserialize();
     testDoubleSerializer();
+    testLongDoubleSerializerDeserialize();
+    testLongDoubleSerializerDeserialize();
+    testLongDoubleSerializer();
 }

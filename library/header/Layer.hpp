@@ -25,6 +25,9 @@ class Layer
 	const std::vector<floatType> &calculate(const std::vector<floatType> &inputs);
 	std::vector<floatType> weightedSum(const std::vector<floatType> &inputs);
 
+	std::string getAsString() const;
+	void loadFromString(std::string string);
+
 	void changeWeights();
 
 	unsigned int size;
@@ -68,6 +71,32 @@ template <class floatType>
 Layer<floatType>::Layer(unsigned int _size, unsigned int _inputSize)
 	: size(_size), inputSize(_inputSize), normalization(Identity<floatType>()), neurons(_size, Neuron<floatType>(_inputSize))
 {
+}
+
+template <class floatType>
+std::string Layer<floatType>::getAsString() const
+{
+	std::string temp;
+	for (const auto &i : neurons)
+		temp += i.getAsString() + "]";
+	return temp;
+}
+
+template <class floatType>
+void Layer<floatType>::loadFromString(std::string string)
+{
+	std::string temp;
+	neurons.resize(0);
+	for (const auto i : string)
+		if (i == ']')
+		{
+			ZNN::Neuron<floatType> n;
+			n.loadFromString(temp);
+			neurons.push_back(n);
+			temp = "";
+		}
+		else
+			temp += i;
 }
 
 template <class floatType>

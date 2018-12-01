@@ -26,6 +26,17 @@ TEST_CASE("Neuron")
         }
     };
 
+    struct testLoadFromString
+    {
+        testLoadFromString()
+        {
+            ZNN::Neuron<double> neuron(100);
+            ZNN::Neuron<double> neuron2{};
+            neuron2.loadFromString(neuron.getAsString());
+            CHECK(neuron2.weights.size() == 100);
+        }
+    };
+
     struct testWeightedSum
     {
         testWeightedSum()
@@ -41,4 +52,5 @@ TEST_CASE("Neuron")
     testConstructor();
     testWeightedSum();
     testGetAsString();
+    testLoadFromString();
 }

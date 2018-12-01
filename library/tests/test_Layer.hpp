@@ -10,6 +10,8 @@ void testConstructor();
 void testCalculate();
 void testWeightedSum();
 void testBiasNode();
+void testGetAsString();
+void testLoadFromString();
 
 void testConstructor()
 {
@@ -30,6 +32,21 @@ void testCalculate()
     CHECK(outputs[0] <= 1);
 }
 
+void testGetAsString()
+{
+    ZNN::Layer<double> layer(10, 100);
+    CHECK(layer.getAsString().size() > 100);
+}
+
+void testLoadFromString()
+{
+    ZNN::Layer<double> layer(100, 10);
+    ZNN::Layer<double> layer2(0, 0);
+    layer2.loadFromString(layer.getAsString());
+    CHECK(layer2.neurons.size() == 100);
+    CHECK(layer2.neurons[0].weights.size() == 10);
+}
+
 void testWeightedSum()
 {
     ZNN::Layer<double> layer(10, 100);
@@ -46,9 +63,9 @@ void testBiasNode()
 
 TEST_CASE("Layer")
 {
-
     testConstructor();
     testCalculate();
     testWeightedSum();
     testBiasNode();
+    testLoadFromString();
 }

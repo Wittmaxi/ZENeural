@@ -16,25 +16,44 @@ class Neuron
 {
   public:
 	explicit Neuron(unsigned int inputSize);
+	Neuron();
 	floatType weightedSum(std::vector<floatType> inputs);
 
-	std::string getAsString();
-	void loadFromString (const std::string& string);
+	std::string getAsString() const;
+	void loadFromString (std::string string);
 
 	std::vector<floatType> weights;
 };
 
 template<class floatType>
-std::string Neuron<floatType>::getAsString () {
+std::string Neuron<floatType>::getAsString () const {
 	std::string temp;
 	for (const auto& weight : weights)
 		temp += Serializer <floatType>{}.serialize(weight) + ",";
 	return temp;
 }
 
+template<class floatType>
+void Neuron<floatType>::loadFromString (std::string string) {
+	std::string temp;
+	weights.resize(0);
+	for (const auto i : string)
+		if (i == ',') {
+			weights.push_back (Serializer<floatType>{}.deserialize(temp));
+			temp = "";
+		}
+		else
+			temp += i;
+}
+
 template <class floatType>
 Neuron<floatType>::Neuron(unsigned int inputSize)
 	: weights(inputSize, 0.1f)
+{
+}
+
+template <class floatType>
+Neuron<floatType>::Neuron()
 {
 }
 

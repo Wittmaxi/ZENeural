@@ -51,4 +51,21 @@ struct Serializer<double> {
     }
 };
 
+template<>
+struct Serializer<long double> {
+    std::string serialize (const long double& value) 
+    {
+        std::stringstream temp;
+        temp << std::setprecision(50) << value;
+        return temp.str();
+    }
+    long double deserialize (const std::string& value) 
+    {
+        std::stringstream stream (value);
+        long double temp;
+        stream >> temp;
+        return temp;
+    }
+};
+
 } // namespace ZNN
