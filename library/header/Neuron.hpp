@@ -8,7 +8,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 #pragma once
 #include <string>
-#include <string_view>
+#include "util/numbers.hpp"
 
 namespace ZNN {
 template <class floatType>
@@ -19,6 +19,7 @@ class Neuron
 	floatType weightedSum(std::vector<floatType> inputs);
 
 	std::string getAsString();
+	void loadFromString (const std::string& string);
 
 	std::vector<floatType> weights;
 };
@@ -27,8 +28,7 @@ template<class floatType>
 std::string Neuron<floatType>::getAsString () {
 	std::string temp;
 	for (const auto& weight : weights)
-		for (size_t readPos = 0; readPos < sizeof (floatType); readPos++)
-			temp += std::string (1, reinterpret_cast<const char*> (&weight)[readPos]);
+		temp += Serializer <floatType>{}.serialize(weight) + ",";
 	return temp;
 }
 
