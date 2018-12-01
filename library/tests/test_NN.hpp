@@ -236,7 +236,8 @@ TEST_CASE("Neural Network")
 
             ZNN::NeuralNetwork<double> c;
             c.loadFromString (b.getAsString());
-
+            c.setNormalization(ZNN::Fermi<double>());
+            
             //artificially add one so the epsilon works better
             CHECK(Approx(b.guess(input[0])[0] + 1).epsilon(0.15) == target[0][0] + 1);
             CHECK(Approx(b.guess(input[1])[0] + 1).epsilon(0.15) == target[1][0] + 1);
