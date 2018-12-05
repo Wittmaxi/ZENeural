@@ -28,7 +28,7 @@ install: compile_header
 	sudo cp ./build/zeneural.hpp /usr/include/zeneural.hpp
 
 test: 
-	make -C ./library/tests #make the unit tests
+	make -C ./library/tests  #make the unit tests
 
 full_test:
 	make valgrind -C ./library/tests

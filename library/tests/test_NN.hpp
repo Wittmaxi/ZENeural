@@ -243,11 +243,7 @@ TEST_CASE("Neural Network")
             CHECK(Approx(b.guess(input[1])[0] + 1).epsilon(0.15) == target[1][0] + 1);
             CHECK(Approx(b.guess(input[2])[0] + 1).epsilon(0.15) == target[2][0] + 1);
             CHECK(Approx(b.guess(input[3])[0] + 1).epsilon(0.15) == target[3][0] + 1);
-
             
-            std::cout << b.getAsString() << "\n";
-            std::cout << c.getAsString() << "\n";
-
             CHECK (c.getAsString() == b.getAsString());
             CHECK (c.guess(input[0]) == b.guess(input[0]));
         }

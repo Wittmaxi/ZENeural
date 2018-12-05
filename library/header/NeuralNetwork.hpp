@@ -24,13 +24,13 @@ class FeedForwardNeuralNetwork
 	void addHiddenLayer(unsigned int layerSize);
 
 	std::vector<floatType> guess(const std::vector<floatType>& input);
-	floatType train(std::vector<floatType>& input, std::vector<floatType>& target);
+	floatType train(const std::vector<floatType>& input, const std::vector<floatType>& target);
 
 	void setLearningRate(floatType learningRate);
 	void setNormalization(const Normalization<floatType> &normalizationObject);
 
 	std::string getAsString() const;
-	void loadFromString(std::string string); //TODO
+	void loadFromString(const std::string& string); //TODO
 
   protected:
 	unsigned int trainingIterations = 0;
@@ -39,7 +39,7 @@ class FeedForwardNeuralNetwork
 	std::vector<HiddenLayer<floatType>> layers;
 	OutputLayer<floatType> outputLayer;
 
-	void trainLayers(std::vector<floatType>& target);
+	void trainLayers(const std::vector<floatType>& target);
 
 	unsigned int getLastLayersSize();
 	unsigned int getLastLayersSizeWithBias();
@@ -92,7 +92,7 @@ std::vector<floatType> FeedForwardNeuralNetwork<floatType>::guess(const std::vec
 }
 
 template <class floatType>
-floatType FeedForwardNeuralNetwork<floatType>::train(std::vector<floatType>& input, std::vector<floatType>& target)
+floatType FeedForwardNeuralNetwork<floatType>::train(const std::vector<floatType>& input, const std::vector<floatType>& target)
 {
 	guess(input);
 	trainLayers(target);
@@ -100,7 +100,7 @@ floatType FeedForwardNeuralNetwork<floatType>::train(std::vector<floatType>& inp
 }
 
 template <class floatType>
-void FeedForwardNeuralNetwork<floatType>::setLearningRate(floatType learningRate)
+void FeedForwardNeuralNetwork<floatType>::setLearningRate(const floatType learningRate)
 {
 	for (auto &i : layers)
 		i.learningRate = learningRate;
@@ -153,7 +153,7 @@ void FeedForwardNeuralNetwork<floatType>::checkCompleteSetup()
 }
 
 template <class floatType>
-void FeedForwardNeuralNetwork<floatType>::trainLayers(std::vector<floatType>& target)
+void FeedForwardNeuralNetwork<floatType>::trainLayers(const std::vector<floatType>& target)
 {
 	outputLayer.train(target);
 	std::vector<floatType> lastLayersDerivative = outputLayer.derivatives;
@@ -178,7 +178,7 @@ std::string FeedForwardNeuralNetwork<floatType>::getAsString() const
 }
 
 template<class floatType>
-void FeedForwardNeuralNetwork<floatType>::loadFromString(std::string string) {
+void FeedForwardNeuralNetwork<floatType>::loadFromString(const std::string& string) {
 	std::string temp;
 	layers.resize(0);
 	for (const auto i : string)
