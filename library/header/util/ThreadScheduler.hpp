@@ -17,6 +17,8 @@ namespace ZNN {
             void waitUntilAllClosed () {
                 for (auto &i : threads)
                     i.join();
+
+                threads.resize(0);
             }
             void addThread (const std::function <void (void)> &function) {
                 threads.push_back (std::thread (function));
