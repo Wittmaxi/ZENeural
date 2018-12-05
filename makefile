@@ -14,6 +14,7 @@ compile_header:
 	echo "#define zeneural_inlcuded_" >> ./build/zeneural.hpp
 	cat ./library/header/includes.h >> ./build/zeneural.hpp
 	cat ./library/header/util/assert.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/util/ThreadScheduler.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/util/numbers.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/normalization.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/Neuron.hpp | grep -v "^#" >> ./build/zeneural.hpp

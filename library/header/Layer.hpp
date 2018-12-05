@@ -11,6 +11,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include "util/assert.hpp"
 #include "normalization.hpp"
 #include "Neuron.hpp"
+#include "util/ThreadScheduler.hpp"
 
 namespace ZNN
 {
@@ -33,6 +34,7 @@ class Layer
 	unsigned int size;
 	unsigned int inputSize;
 	floatType learningRate = 0.2;
+
 	Normalization<floatType> normalization;
 
 	std::vector<Neuron<floatType>> neurons;
@@ -114,12 +116,26 @@ template <class floatType>
 std::vector<floatType> Layer<floatType>::weightedSum(const std::vector<floatType> &inputs)
 {
 	std::vector<floatType> temporaryResults{};
+	UTIL::ThreadScheduler ts{};
 
-	for (size_t i = 0; i < neurons.size(); i++)
-		temporaryResults.push_back(normalization.normalization(neurons[i].weightedSum(inputs)));
+	auto calculate = [&] (unsigned int begin, unsigned int end) noexcept
+	{
+		for (; begin < end; begin++)
+			temporaryResults.push_back(normalization.normalization(neurons[begin].weightedSum(inputs)));
+	};
+
+	for (unsigned int i = 0; i < neurons.size(); i += 1000) {
+		unsigned int end = i + 1000;
+		if (! (end < neurons.size()))
+			end = neurons.size() - i;
+		ts.addThread (calculate, i, end);
+	}
+
+	ts.waitUntilAllClosed();
 
 	return std::move(temporaryResults);
 }
+
 
 template <class floatType>
 void Layer<floatType>::changeWeights()
@@ -128,6 +144,7 @@ void Layer<floatType>::changeWeights()
 		for (size_t j = 0; j < this->inputSize; j++)
 			this->neurons[i].weights[j] -= this->learningRate * this->layerInputValues[j] * this->derivatives[i];
 }
+
 
 //
 

@@ -13,11 +13,11 @@ void testFunction () {
     ZNN::UTIL::ThreadScheduler sc;
     int a = 0;
     int b = 0;
-    sc.addThread ([&a] () {
+    sc.addThread ([&a] () noexcept {
         for (int i = 0; i < 100000; i++)
             a++;
     });
-    sc.addThread ([&b] () {
+    sc.addThread ([&b] () noexcept {
         for (int i = 0; i < 100000; i++)
             b++;
     });

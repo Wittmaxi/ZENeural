@@ -24,9 +24,9 @@ void testConstructor()
 
 void testCalculate()
 {
-    ZNN::Layer<double> layer(1000, 100);
+    ZNN::Layer<double> layer(1000, 100000);
     layer.normalization = ZNN::Fermi<double>();
-    std::vector<double> inputs(999, 100);
+    std::vector<double> inputs(9000000, 100);
     std::vector<double> outputs = layer.calculate(inputs);
     CHECK(outputs.size() == 1000);
     CHECK(outputs[0] <= 1);

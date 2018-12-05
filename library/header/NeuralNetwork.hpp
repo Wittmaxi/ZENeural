@@ -36,6 +36,7 @@ class FeedForwardNeuralNetwork
 	unsigned int trainingIterations = 0;
 	unsigned int inputLayerSize = 0;
 	unsigned int outputLayerSize = 0;
+	unsigned int numberThreads = 1;
 	std::vector<HiddenLayer<floatType>> layers;
 	OutputLayer<floatType> outputLayer;
 
