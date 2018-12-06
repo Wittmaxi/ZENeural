@@ -9,6 +9,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #pragma once
 #include <string>
 #include "util/numbers.hpp"
+#include "util/ThreadScheduler.hpp"
 
 namespace ZNN {
 template <class floatType>

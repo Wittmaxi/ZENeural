@@ -33,6 +33,7 @@ class Layer
 
 	unsigned int size;
 	unsigned int inputSize;
+	unsigned int threadHint = 2;
 	floatType learningRate = 0.2;
 
 	Normalization<floatType> normalization;
@@ -116,26 +117,20 @@ template <class floatType>
 std::vector<floatType> Layer<floatType>::weightedSum(const std::vector<floatType> &inputs)
 {
 	std::vector<floatType> temporaryResults{};
+	temporaryResults.resize(neurons.size());
 	UTIL::ThreadScheduler ts{};
 
-	auto calculate = [&] (unsigned int begin, unsigned int end) noexcept
+	auto calculateNth = [&](unsigned int startingPoint, unsigned int series) noexcept
 	{
-		for (; begin < end; begin++)
-			temporaryResults.push_back(normalization.normalization(neurons[begin].weightedSum(inputs)));
+		for (unsigned int i = startingPoint; i < neurons.size(); i += series)
+			temporaryResults[i] = (normalization.normalization(neurons[i].weightedSum(inputs)));
 	};
-
-	for (unsigned int i = 0; i < neurons.size(); i += 1000) {
-		unsigned int end = i + 1000;
-		if (! (end < neurons.size()))
-			end = neurons.size() - i;
-		ts.addThread (calculate, i, end);
-	}
-
+	for (unsigned int i = 0; i < threadHint; i++)
+		ts.addThread(calculateNth, i, threadHint);
 	ts.waitUntilAllClosed();
 
 	return std::move(temporaryResults);
 }
-
 
 template <class floatType>
 void Layer<floatType>::changeWeights()
@@ -144,7 +139,6 @@ void Layer<floatType>::changeWeights()
 		for (size_t j = 0; j < this->inputSize; j++)
 			this->neurons[i].weights[j] -= this->learningRate * this->layerInputValues[j] * this->derivatives[i];
 }
-
 
 //
 

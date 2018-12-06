@@ -28,7 +28,7 @@ namespace ZNN {
             }
             template <class T, class... args>
             void addThread (T function, args... arguments) noexcept {
-                threads.emplace_back(std::move (std::thread(function, arguments...)));
+                threads.emplace_back(std::thread(function, arguments...));
             }
             ~ThreadScheduler() {
                 waitUntilAllClosed();
