@@ -10,18 +10,18 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 void testFunction ();
 
 void testFunction () {
-    ZNN::UTIL::ThreadScheduler sc;
+    ZNN::UTIL::ThreadScheduler sc{2};
     int a = 0;
     int b = 0;
-    sc.addThread ([&a] () noexcept {
+    sc.runFunction ([&a] () noexcept {
         for (int i = 0; i < 100000; i++)
             a++;
     });
-    sc.addThread ([&b] () noexcept {
+    sc.runFunction ([&b] () noexcept {
         for (int i = 0; i < 100000; i++)
             b++;
     });
-    sc.waitUntilAllClosed();
+    sc.waitUntilAllStopped();
     CHECK (a == 100000);
     CHECK (b == 100000);
 }
