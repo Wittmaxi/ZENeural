@@ -33,9 +33,8 @@ class Layer
 
 	unsigned int size;
 	unsigned int inputSize;
-	unsigned int threadHint = 2;
 	floatType learningRate = 0.2;
-	
+
 	Normalization<floatType> normalization;
 
 	std::vector<Neuron<floatType>> neurons;
@@ -118,7 +117,6 @@ std::vector<floatType> Layer<floatType>::weightedSum(const std::vector<floatType
 {
 	std::vector<floatType> temporaryResults{};
 	temporaryResults.resize(neurons.size());
-	UTIL::ThreadScheduler ts{threadHint};
 
 	auto calculateNth = [&](unsigned int startingPoint, unsigned int series) noexcept
 	{
@@ -126,11 +124,9 @@ std::vector<floatType> Layer<floatType>::weightedSum(const std::vector<floatType
 			temporaryResults[i] = (normalization.normalization(neurons[i].weightedSum(inputs)));
 	};
 	
-	for (unsigned int i = 0; i < threadHint; i++)
-		ts.runFunction(calculateNth, i, threadHint);
-	ts.waitUntilAllStopped();
-	if (temporaryResults.size() != neurons.size())
-		std::cout << "PROBLEM\n";
+	for (unsigned int i = 0; i < UTIL::ts.size(); i++)
+		UTIL::ts.runFunction(calculateNth, i, UTIL::ts.size());
+	UTIL::ts.waitUntilAllStopped();
 	return temporaryResults;
 }
 

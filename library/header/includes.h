@@ -17,3 +17,5 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include <thread>
 #include <iomanip>
 #include <sstream>
+#include <queue>
+#include <mutex>

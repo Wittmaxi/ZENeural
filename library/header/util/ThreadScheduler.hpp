@@ -10,7 +10,6 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include <thread>
 #include <vector>
 #include <functional>
-#include <atomic>
 #include <queue>
 #include <mutex>
 
@@ -89,7 +88,7 @@ struct Thread
     template <class callable, class... args>
     void queueFunction(callable f, args... arguments)
     {
-        std::lock_guard guard (queueMutex);
+        std::lock_guard<std::mutex> guard (queueMutex);
         fun.push(std::make_unique <Function<callable, args...>>(f, arguments...));
     }
     bool exit = false;
@@ -100,7 +99,7 @@ struct Thread
 
 struct ThreadScheduler
 {
-    ThreadScheduler(unsigned int amountOfThreads) : threads(amountOfThreads, Thread{})
+    ThreadScheduler(unsigned int amountOfThreads = 1) : threads(amountOfThreads, Thread{})
     {
     }
     void waitUntilAllClosed()
@@ -115,8 +114,16 @@ struct ThreadScheduler
     template <class callable, class... args>
     void runFunction(callable function, args... arguments) noexcept
     {
-        threads [dispatcher % (threads.size() - 1)].queueFunction (function, arguments...);
+        threads [dispatcher % size()].queueFunction (function, arguments...);
         dispatcher++;
+    }
+    size_t size() {
+        return threads.size();
+    }
+    void resize (size_t newSize) {
+        waitUntilAllStopped();
+        waitUntilAllClosed();
+        threads = std::vector<Thread> (newSize, Thread{});
     }
     ~ThreadScheduler()
     {
@@ -126,6 +133,6 @@ struct ThreadScheduler
   private:
     std::vector<Thread> threads;
     unsigned int dispatcher;
-};
+} ts;
 } // namespace UTIL
 } // namespace ZNN
