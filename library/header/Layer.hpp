@@ -161,8 +161,17 @@ template <class floatType>
 void OutputLayer<floatType>::calculateDerivatives()
 {
 	std::vector<floatType> temporaryDerivatives;
-	for (size_t i = 0; i < this->size; i++)
-		temporaryDerivatives.push_back(errors[i] * -1 * this->normalization.derivative(this->layerOutputValues[i]));
+	temporaryDerivatives.resize(this->size);
+
+	auto calculateNth = [&](unsigned int startingPoint, unsigned int series) noexcept
+	{
+		for (unsigned int i = startingPoint; i < this->size; i+= series)
+			temporaryDerivatives[i] = errors[i] * -1 * this->normalization.derivative(this->layerOutputValues[i]);
+	};
+	
+	for (unsigned int i = 0; i < UTIL::ts.size(); i++)
+		UTIL::ts.runFunction(calculateNth, i, UTIL::ts.size());
+	UTIL::ts.waitUntilAllStopped();
 
 	this->derivatives = temporaryDerivatives;
 }
@@ -191,14 +200,25 @@ HiddenLayer<floatType>::HiddenLayer(unsigned int _size, unsigned int _inputSize)
 template <class floatType>
 void HiddenLayer<floatType>::calculateDerivatives(const std::vector<floatType> &nextLayersDerivatives, const std::vector<Neuron<floatType>> &nextLayersNeurons)
 {
+
+
 	std::vector<floatType> temporaryDerivatives;
-	for (unsigned int i = 0; i < this->size; i++)
+	temporaryDerivatives.resize (this->size);
+
+	auto calculateNth = [&](unsigned int startingPoint, unsigned int series) noexcept
 	{
-		floatType accumulator = 0;
-		for (size_t j = 0; j < nextLayersDerivatives.size(); j++)
-			accumulator += nextLayersDerivatives[j] * nextLayersNeurons[j].weights[i];
-		temporaryDerivatives.push_back(this->normalization.derivative(this->layerOutputValues[i]) * accumulator);
-	}
+		for (unsigned int i = startingPoint; i < this->size; i+= series)
+		{
+			floatType accumulator = 0;
+			for (size_t j = 0; j < nextLayersDerivatives.size(); j++)
+				accumulator += nextLayersDerivatives[j] * nextLayersNeurons[j].weights[i];
+			temporaryDerivatives[i] = this->normalization.derivative(this->layerOutputValues[i]) * accumulator;
+		}
+	};
+	
+	for (unsigned int i = 0; i < UTIL::ts.size(); i++)
+		UTIL::ts.runFunction(calculateNth, i, UTIL::ts.size());
+	UTIL::ts.waitUntilAllStopped();
 	this->derivatives = temporaryDerivatives;
 }
 
