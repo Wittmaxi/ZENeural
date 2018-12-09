@@ -22,7 +22,7 @@ struct Serializer<float> {
     std::string serialize (const float& value) 
     {
         std::stringstream temp;
-        temp << std::setprecision(200) << value;
+        temp << std::setprecision(20) << value;
         return temp.str();
     }
     float deserialize (const std::string& value) 

@@ -33,10 +33,8 @@ class FeedForwardNeuralNetwork
 	void loadFromString(const std::string& string); //TODO
 
   protected:
-	unsigned int trainingIterations = 0;
 	unsigned int inputLayerSize = 0;
 	unsigned int outputLayerSize = 0;
-	unsigned int numberThreads = 1;
 	std::vector<HiddenLayer<floatType>> layers;
 	OutputLayer<floatType> outputLayer;
 
@@ -135,7 +133,7 @@ template <class floatType>
 floatType FeedForwardNeuralNetwork<floatType>::calculateTotalError()
 {
 	floatType temporaryError = 0;
-	for (auto i : outputLayer.errors)
+	for (const auto &i : outputLayer.errors)
 		temporaryError += i * i;
 	return temporaryError / 2;
 }
@@ -186,6 +184,7 @@ void FeedForwardNeuralNetwork<floatType>::loadFromString(const std::string& stri
 		if (i == '}') {
 			HiddenLayer<floatType> templ(0, 0);
 			templ.loadFromString(temp);
+			inputLayerSize = templ.neurons.size();
 			layers.push_back(templ);
 			temp = "";
 		} else if (i == '>') {

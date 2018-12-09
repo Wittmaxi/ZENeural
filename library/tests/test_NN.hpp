@@ -215,6 +215,7 @@ TEST_CASE("Neural Network")
         void withNeuralNetwork()
         {
             b.setInputLayerSize(2);
+            b.addHiddenLayer(2);
             b.setOutputLayerSize(1);
             b.setLearningRate(0.25);
             b.setNormalization(ZNN::Fermi<double>());
@@ -245,7 +246,13 @@ TEST_CASE("Neural Network")
             CHECK(Approx(b.guess(input[3])[0] + 1).epsilon(0.15) == target[3][0] + 1);
             
             CHECK (c.getAsString() == b.getAsString());
-            CHECK (c.guess(input[0]) == b.guess(input[0]));
+            CHECK(Approx(c.guess(input[0])[0] + 1).epsilon(0.15) == target[0][0] + 1);
+            CHECK(Approx(c.guess(input[1])[0] + 1).epsilon(0.15) == target[1][0] + 1);
+            CHECK(Approx(c.guess(input[2])[0] + 1).epsilon(0.15) == target[2][0] + 1);
+            CHECK(Approx(c.guess(input[3])[0] + 1).epsilon(0.15) == target[3][0] + 1);
+
+            std::cout << c.getAsString() << "\n";
+            std::cout << b.getAsString() << "\n";
         }
     };
 
