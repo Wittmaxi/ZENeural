@@ -33,6 +33,8 @@ test:
 
 full_test:
 	make valgrind -C ./library/tests
+	make test_cov -C ./library/tests
+	make test -C ./library/tests
 
 debug:
 	g++ ./library/*.cpp -o test -g

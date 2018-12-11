@@ -24,9 +24,9 @@ void testConstructor()
 
 void testCalculate()
 {
-    ZNN::Layer<double> layer(100000, 1000);
+    ZNN::Layer<double> layer(100000, 1001);
     layer.normalization = ZNN::Fermi<double>();
-    std::vector<double> inputs(10000, 1000);
+    std::vector<double> inputs(1000, 100000);
     std::vector<double> outputs = layer.calculate(inputs);
     CHECK(outputs.size() == 100000);
     CHECK(outputs[0] <= 1);
@@ -50,7 +50,7 @@ void testLoadFromString()
 void testWeightedSum()
 {
     ZNN::Layer<double> layer(10, 100);
-    std::vector<double> inputs(9, 100);
+    std::vector<double> inputs(100, 1);
     CHECK(layer.weightedSum(inputs).size() == 10);
 }
 
@@ -63,9 +63,9 @@ void testBiasNode()
 
 TEST_CASE("Layer")
 {
-    testConstructor();
-    testCalculate();
-    testWeightedSum();
-    testBiasNode();
-    testLoadFromString();
+   testConstructor();
+   testCalculate();
+   testWeightedSum();
+   testBiasNode();
+   testLoadFromString();
 }

@@ -123,9 +123,7 @@ unsigned int FeedForwardNeuralNetwork<floatType>::getLastLayersSizeWithBias()
 template <class floatType>
 unsigned int FeedForwardNeuralNetwork<floatType>::getLastLayersSize()
 {
-	unsigned int lastLayersSize = inputLayerSize;
-	if (layers.size() > 0)
-		lastLayersSize = layers.back().size;
+	unsigned int lastLayersSize = (layers.size() == 0) ? inputLayerSize : layers.back().size;
 	return lastLayersSize;
 }
 

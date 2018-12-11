@@ -12,10 +12,10 @@ all:
 	rm -f ./test
 
 test_cov:
-	g++ test_main.cpp -g -fprofile-arcs -ftest-coverage -o ./test
+	g++ -lpthread test_main.cpp -g -fprofile-arcs -ftest-coverage -o ./test
 	gcov ./test_main.cpp -m
 	rm -f ./*.gcov
 
-valgrind: 
-	g++ test_valgrind.cpp -g -o test
+valgrind:
+	g++ -lpthread test_valgrind.cpp -g -o test
 	valgrind ./test

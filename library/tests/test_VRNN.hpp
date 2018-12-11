@@ -42,7 +42,7 @@ TEST_CASE("Vanilla Recurrent Neural Network")
         }
     };
 
-    testAddHiddenLayer();
-    testClearStates();
+    // testAddHiddenLayer();
+    //´ testClearStates();
     testGuess();
 }

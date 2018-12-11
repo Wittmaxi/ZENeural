@@ -27,7 +27,7 @@ class Layer
 	std::vector<floatType> weightedSum(const std::vector<floatType> &inputs);
 
 	std::string getAsString() const;
-	void loadFromString(std::string string);
+	void loadFromString(const std::string &string);
 
 	void changeWeights();
 
@@ -85,7 +85,7 @@ std::string Layer<floatType>::getAsString() const
 }
 
 template <class floatType>
-void Layer<floatType>::loadFromString(std::string string)
+void Layer<floatType>::loadFromString(const std::string &string)
 {
 	std::string temp;
 	neurons.resize(0);

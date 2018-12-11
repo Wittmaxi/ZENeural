@@ -1,8 +1,9 @@
 #include "../header/NeuralNetwork.hpp"
+#include "../header/VanillaRecurrentNetwork.hpp"
 
-struct testTrainWithMultipleLayers : public ZNN::NeuralNetwork<double>
+struct testTrainWithMultipleLayers : public ZNN::FeedForwardNeuralNetwork<double>
 {
-    ZNN::NeuralNetwork<double> b;
+    ZNN::FeedForwardNeuralNetwork<double> b;
     std::vector<std::vector<double>> input{{1, 0}, {0, 1}, {0, 0}, {1, 1}};
     std::vector<std::vector<double>> target{{1}, {1}, {0}, {0}};
     testTrainWithMultipleLayers()
@@ -32,9 +33,15 @@ struct testTrainWithMultipleLayers : public ZNN::NeuralNetwork<double>
     }
 };
 
+std::ostream& operator<< (std::ostream& os, std::vector<double> vec) {
+    for (const auto &i: vec)
+        os << i << ",";
+    return os;
+}
+
 void testVRNN()
 {
-    ZNN::VRNN<double> textCreator;
+    ZNN::VanillaRecurrentNeuralNetwork<double> textCreator;
     textCreator.setInputLayerSize(4);
     textCreator.addHiddenLayer(50);
     textCreator.addHiddenLayer(50);
@@ -64,6 +71,7 @@ void testVRNN()
 
 int main()
 {
+    ZNN::UTIL::ts.resize(5);
     testTrainWithMultipleLayers();
     testVRNN();
 }

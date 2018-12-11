@@ -20,6 +20,8 @@ protected:
     std::vector<floatType> appendStatesToInputs (std::vector<floatType> inputs, Layer<floatType>& layer);
 };
 
+
+
 template<class floatType>
 void VanillaRecurrentNeuralNetwork<floatType>::addHiddenLayer(unsigned layerSize) {
     UTIL::assert(this->inputLayerSize == 0, "You have to create atleast an input layer before creating an Output layer");
@@ -27,6 +29,7 @@ void VanillaRecurrentNeuralNetwork<floatType>::addHiddenLayer(unsigned layerSize
 	UTIL::assert(this->outputLayerSize != 0, "You cannot create hidden Layers behind of the Output Layer");
 
 	this->layers.push_back(HiddenLayer<floatType>(layerSize, this->getLastLayersSizeWithBias() + layerSize));
+    this->layers.back().layerOutputValues.resize (layerSize);
 }
 
 template<class floatType>
@@ -42,9 +45,8 @@ std::vector<floatType> VanillaRecurrentNeuralNetwork<floatType>::guess (const st
 	this->checkCompleteSetup();
 
     std::vector<floatType> results = input;
-	for (auto &i : this->layers) {
+	for (auto &i : this->layers)
 		results = i.calculate(appendStatesToInputs (results, i));
-    }
 	return this->outputLayer.calculate(results);
 }
 
