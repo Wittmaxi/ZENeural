@@ -7,3 +7,5 @@ build/zeneural.hpp
 build/*
 /library/external
 library/tests/test
+vgcore.*
+out.txt

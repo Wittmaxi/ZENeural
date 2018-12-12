@@ -36,6 +36,7 @@ struct testTrainWithMultipleLayers : public ZNN::FeedForwardNeuralNetwork<double
 std::ostream& operator<< (std::ostream& os, std::vector<double> vec) {
     for (const auto &i: vec)
         os << i << ",";
+    os << "\n";
     return os;
 }
 
@@ -44,23 +45,25 @@ void testVRNN()
     ZNN::VanillaRecurrentNeuralNetwork<double> textCreator;
     textCreator.setInputLayerSize(4);
     textCreator.addHiddenLayer(50);
-    textCreator.addHiddenLayer(50);
     textCreator.setOutputLayerSize(4);
     textCreator.setNormalization(ZNN::Fermi<double>());
-    textCreator.setLearningRate(0.1);
+    textCreator.setLearningRate(0.001);
     std::vector<std::vector<double>> dictionary {{1, 0, 0, 0},
                                                  {0, 1, 0, 0},
                                                  {0, 0, 1, 0},
                                                  {0, 0, 0, 1},
                                                  {0, 0, 0, 0}};
+    double sumOfErr = 0;
     for (int i = 0; i < 1000000; i++)
     {
-        textCreator.train(dictionary[0], dictionary[1]);
-        textCreator.train(dictionary[4], dictionary[2]);
-        textCreator.train(dictionary[4], dictionary[3]);
-        textCreator.train(dictionary[4], dictionary[3]);
-        textCreator.train(dictionary[4], dictionary[4]);
+        sumOfErr += textCreator.train(dictionary[0], dictionary[1]);
+        sumOfErr += textCreator.train(dictionary[4], dictionary[2]);
+        sumOfErr += textCreator.train(dictionary[4], dictionary[3]);
+        sumOfErr += textCreator.train(dictionary[4], dictionary[3]);
+        sumOfErr += textCreator.train(dictionary[4], dictionary[4]);
         textCreator.clearStates();
+        if (i % 100 == 0)
+            std::cout << "iteration: " << i << " AVG ERROR: " << sumOfErr / i << "\n";
     }
     std::cout << textCreator.guess(dictionary[0]);
     std::cout << textCreator.guess(dictionary[4]);

@@ -16,6 +16,7 @@ public:
     void addHiddenLayer (unsigned int layerSize);
     void clearStates ();
 	std::vector<floatType> guess(const std::vector<floatType>& input);
+    floatType train(const std::vector<floatType>& input, const std::vector<floatType>& target);
 protected:
     std::vector<floatType> appendStatesToInputs (std::vector<floatType> inputs, Layer<floatType>& layer);
 };
@@ -30,6 +31,7 @@ void VanillaRecurrentNeuralNetwork<floatType>::addHiddenLayer(unsigned layerSize
 
 	this->layers.push_back(HiddenLayer<floatType>(layerSize, this->getLastLayersSizeWithBias() + layerSize));
     this->layers.back().layerOutputValues.resize (layerSize);
+    clearStates();
 }
 
 template<class floatType>
@@ -38,6 +40,15 @@ void VanillaRecurrentNeuralNetwork<floatType>::clearStates () {
         for (auto &outputValue : layer.layerOutputValues)
             outputValue = 0;
 }
+
+template <class floatType>
+floatType VanillaRecurrentNeuralNetwork<floatType>::train(const std::vector<floatType>& input, const std::vector<floatType>& target)
+{
+	guess(input);
+	this->trainLayers(target);
+	return this->calculateTotalError();
+}
+
 
 template<class floatType>
 std::vector<floatType> VanillaRecurrentNeuralNetwork<floatType>::guess (const std::vector<floatType>& input) {
