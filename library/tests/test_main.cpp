@@ -9,6 +9,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #define CATCH_CONFIG_MAIN
 #include "../header/NeuralNetwork.hpp"
 #include "../header/Layer.hpp"
+#include "../header/GatedNeuron.hpp"
 #include "../header/VanillaRecurrentNetwork.hpp"
 #include "../header/Perceptron.hpp"
 #include "../header/typedefs.hpp"
@@ -25,3 +26,4 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include "test_Perceptron.hpp"
 #include "test_numbers.hpp"
 #include "test_threadScheduler.hpp"
+#include "test_GatedNeuron.hpp"

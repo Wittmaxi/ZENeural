@@ -9,3 +9,4 @@ build/*
 library/tests/test
 vgcore.*
 out.txt
+.vimrc
