@@ -15,6 +15,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include "../header/typedefs.hpp"
 #include "../header/util/numbers.hpp"
 #include "../header/util/ThreadScheduler.hpp"
+#include "../header/util/operations.hpp"
 #include "../external/catch.hpp"
 
 #include "test_Layer.hpp"
@@ -27,3 +28,4 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #include "test_numbers.hpp"
 #include "test_threadScheduler.hpp"
 #include "test_GatedNeuron.hpp"
+#include "test_operations.hpp"

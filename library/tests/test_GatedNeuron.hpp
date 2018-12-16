@@ -16,12 +16,13 @@ TEST_CASE("GatedNeuron.hpp")
         }
         SECTION ("guess") {
             ZNN::Gate<double> g(10);
+            std::vector<double> w(10, 1);
             std::vector<double> v(10, 1);
-            REQUIRE (g.calculateActivations(v).size() == 10);
+            REQUIRE (g.calculateActivations(v, w).size() == 10);
         }
         SECTION ("adjust") {
             ZNN::Gate<double> g(10);
-            std::vector<double> v(11, 1);
+            std::vector<double> v(10, 1);
             std::vector<double> temp = g.layer.neurons[0].weights;
             g.layer.layerInputValues = std::vector<double> (11, 1);
             g.layer.layerOutputValues = std::vector<double> (11, 1);
