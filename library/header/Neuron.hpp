@@ -62,10 +62,8 @@ template <class floatType>
 floatType Neuron<floatType>::weightedSum(std::vector<floatType> inputs)
 {
 	floatType temporaryResult = 0.0;
-	if (weights.size() != inputs.size()) 
-		std::cout << " weights: " << weights.size() << "\t inputs: " << inputs.size() << "\n";
 	for (size_t j = 0; j < weights.size(); j++)
-		temporaryResult += inputs.at(j) * weights.at(j);
+		temporaryResult += inputs[j] * weights[j];
 
 	return temporaryResult;
 }

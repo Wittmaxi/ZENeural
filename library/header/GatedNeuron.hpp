@@ -24,10 +24,14 @@ struct Gate
     OutputLayer<floatType> layer;
 };
 
-template<class floatType>
+template <class floatType>
 struct LSTMUnit
 {
-    std::vector <floatType> previousOutput; 
+    LSTMUnit (unsigned int inputSize);
+    std::vector<floatType> calculate(const std::vector<floatType> &input);
+    std::vector<double> previousOutput;
+    std::vector<double> previousHiddenCellState;
+    Gate<floatType> cellStateGate;
     Gate<floatType> forgetGate;
     Gate<floatType> inputGate;
     Gate<floatType> outputGate;
@@ -42,7 +46,7 @@ Gate<floatType>::Gate(unsigned int inputSize, const ZNN::Normalization<floatType
 
 template <class floatType>
 Gate<floatType>::Gate(unsigned int inputSize)
-    : Gate (inputSize, ZNN::Fermi<floatType>())
+    : Gate(inputSize, ZNN::Fermi<floatType>())
 {
 }
 
@@ -60,6 +64,18 @@ void Gate<floatType>::adjust(const std::vector<floatType> &derivatives)
 }
 
 ///
+template<class floatType>
+LSTMUnit<floatType>::LSTMUnit (unsigned int inputSize, unsigned int hiddenStates) 
+: forgetGate (inputSize), inputGate (inputSize), outputGate(inputSize), cellStateGate (inputSize), previousOutput (inputSize, )
+{
+}
 
+template<class floatType>
+std::vector<floatType> LSTMUnit<floatType>::calculate(const std::vector<floatType> &input)
+{
+    previousOutput = UTIL::addVectors (UTIL::multiplyVectors (forgetGate.calculateActivations(input, previousHiddenCellState), previousOutput), UTIL::multiplyVectors (inputGate.calculateActivations(input, previousHiddenCellState), cellStateGate.calculateActivations (input, previousHiddenCellState)));
+    previousHiddenCellState = UTIL::multiplyVectors (outputGate.calculateActivations(input, previousHiddenCellState), previousOutput);
+    return previousOutput;
+}
 
 } // namespace ZNN
