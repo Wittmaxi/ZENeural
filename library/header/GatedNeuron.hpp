@@ -18,29 +18,28 @@ struct Gate
 {
     Gate(unsigned int inputSize);
     Gate(unsigned int inputSize, const ZNN::Normalization<floatType> &norm);
-    floatType guess(const std::vector<double> &input);
+    std::vector<floatType> calculateActivations(const std::vector<double> &input);
     void adjust(const std::vector<double> &derivatives);
     OutputLayer<floatType> layer;
 };
 
 template <class floatType>
 Gate<floatType>::Gate(unsigned int inputSize, const ZNN::Normalization<floatType> &norm)
-    : layer(1, inputSize + 1)
+    : layer(inputSize, inputSize + 1)
 {
     layer.normalization = norm;
 }
 
 template <class floatType>
 Gate<floatType>::Gate(unsigned int inputSize)
-    : layer(1, inputSize + 1)
+    : Gate (inputSize, ZNN::Fermi<double>())
 {
-    layer.normalization = ZNN::Fermi<double>();
 }
 
 template <class floatType>
-floatType Gate<floatType>::guess(const std::vector<double> &input)
+std::vector<floatType> Gate<floatType>::calculateActivations(const std::vector<double> &input)
 {
-    return (layer.calculate(input)[0] > 0.5) ? 1 : 0;
+    return layer.calculate(input);
 }
 
 template <class floatType>
