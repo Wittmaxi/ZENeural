@@ -15,15 +15,8 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 namespace ZNN
 {
-namespace UTIL
+namespace ASYNC
 {
-enum class SIGNALS : int
-{
-    RUNNING = 0,
-    DONE = 1,
-    EXIT = 2
-};
-
 struct FunctionBase
 {
     virtual void callFunction() = 0;

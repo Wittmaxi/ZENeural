@@ -124,9 +124,9 @@ std::vector<floatType> Layer<floatType>::weightedSum(const std::vector<floatType
 			temporaryResults[i] = (normalization.normalization(neurons[i].weightedSum(inputs)));
 	};
 	
-	for (unsigned int i = 0; i < UTIL::ts.size(); i++)
-		UTIL::ts.runFunction(calculateNth, i, UTIL::ts.size());
-	UTIL::ts.waitUntilAllStopped();
+	for (unsigned int i = 0; i < ASYNC::ts.size(); i++)
+		ASYNC::ts.runFunction(calculateNth, i, ASYNC::ts.size());
+	ASYNC::ts.waitUntilAllStopped();
 	return temporaryResults;
 }
 
@@ -169,9 +169,9 @@ void OutputLayer<floatType>::calculateDerivatives()
 			temporaryDerivatives[i] = errors[i] * -1 * this->normalization.derivative(this->layerOutputValues[i]);
 	};
 	
-	for (unsigned int i = 0; i < UTIL::ts.size(); i++)
-		UTIL::ts.runFunction(calculateNth, i, UTIL::ts.size());
-	UTIL::ts.waitUntilAllStopped();
+	for (unsigned int i = 0; i < ASYNC::ts.size(); i++)
+		ASYNC::ts.runFunction(calculateNth, i, ASYNC::ts.size());
+	ASYNC::ts.waitUntilAllStopped();
 
 	this->derivatives = temporaryDerivatives;
 }
@@ -216,9 +216,9 @@ void HiddenLayer<floatType>::calculateDerivatives(const std::vector<floatType> &
 		}
 	};
 	
-	for (unsigned int i = 0; i < UTIL::ts.size(); i++)
-		UTIL::ts.runFunction(calculateNth, i, UTIL::ts.size());
-	UTIL::ts.waitUntilAllStopped();
+	for (unsigned int i = 0; i < ASYNC::ts.size(); i++)
+		ASYNC::ts.runFunction(calculateNth, i, ASYNC::ts.size());
+	ASYNC::ts.waitUntilAllStopped();
 	this->derivatives = temporaryDerivatives;
 }
 

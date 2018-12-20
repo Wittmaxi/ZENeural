@@ -27,7 +27,7 @@ struct Gate
 template <class floatType>
 struct LSTMUnit
 {
-    LSTMUnit (unsigned int inputSize);
+    LSTMUnit (unsigned int inputSize, unsigned int hiddenStates);
     std::vector<floatType> calculate(const std::vector<floatType> &input);
     std::vector<double> previousOutput;
     std::vector<double> previousHiddenCellState;
@@ -66,7 +66,7 @@ void Gate<floatType>::adjust(const std::vector<floatType> &derivatives)
 ///
 template<class floatType>
 LSTMUnit<floatType>::LSTMUnit (unsigned int inputSize, unsigned int hiddenStates) 
-: forgetGate (inputSize), inputGate (inputSize), outputGate(inputSize), cellStateGate (inputSize), previousOutput (inputSize, )
+: forgetGate (inputSize), inputGate (inputSize), outputGate(inputSize), cellStateGate (inputSize), previousOutput (inputSize, 0)
 {
 }
 

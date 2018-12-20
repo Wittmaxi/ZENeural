@@ -10,7 +10,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 void testFunction ();
 
 void testFunction () {
-    ZNN::UTIL::ThreadScheduler sc{2};
+    ZNN::ASYNC::ThreadScheduler sc{2};
     int a = 0;
     int b = 0;
     sc.runFunction ([&a] () noexcept {

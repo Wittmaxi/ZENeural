@@ -76,7 +76,7 @@ void testVRNN()
 
 int main()
 {
-    ZNN::UTIL::ts.resize(5);
+    ZNN::ASYNC::ts.resize(5);
     testTrainWithMultipleLayers();
     testVRNN();
 }

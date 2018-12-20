@@ -64,6 +64,6 @@ std::vector<floatType> VanillaRecurrentNeuralNetwork<floatType>::guess (const st
 template<class floatType>
 std::vector<floatType> VanillaRecurrentNeuralNetwork<floatType>::appendStatesToInputs (std::vector<floatType> inputs, Layer<floatType>& layer) {
     inputs.insert(inputs.end(), layer.layerOutputValues.begin(), layer.layerOutputValues.end());
-    return inputs;
+	return inputs;
 }
 }
