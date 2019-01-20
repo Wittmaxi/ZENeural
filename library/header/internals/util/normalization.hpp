@@ -45,27 +45,17 @@ Normalization<floatType> Identity()
 	return Normalization<floatType>(normalization, derivative);
 }
 
-template <class floatType>
-ZNN::Normalization<floatType> Sine()
+template<class floatType>
+Normalization<floatType> TanH ()
 {
 	std::function<floatType(floatType)> normalization = [=](floatType input) -> floatType {
-		return std::sin(input);
+		return std::tanh (input);
 	};
 	std::function<floatType(floatType)> derivative = [=](floatType input) -> floatType {
-		return std::cos(input);
+		floatType normalizedValue = std::tanh(input);
+		return 1 - normalizedValue * normalizedValue;
 	};
-	return ZNN::Normalization<floatType>(normalization, derivative);
+	return Normalization<floatType>(normalization, derivative);
 }
 
-template <class floatType>
-ZNN::Normalization<floatType> Cosine()
-{
-	std::function<floatType(floatType)> normalization = [=](floatType input) -> floatType {
-		return std::cos(input);
-	};
-	std::function<floatType(floatType)> derivative = [=](floatType input) -> floatType {
-		return -std::sin(input);
-	};
-	return ZNN::Normalization<floatType>(normalization, derivative);
-}
 } // namespace ZNN

@@ -12,17 +12,17 @@ compile_header:
 	-mkdir ./build
 	echo "#ifndef zeneural_included_" > ./build/zeneural.hpp
 	echo "#define zeneural_inlcuded_" >> ./build/zeneural.hpp
-	cat ./library/header/includes.h >> ./build/zeneural.hpp
-	cat ./library/header/util/assert.hpp | grep -v "^#" >> ./build/zeneural.hpp
-	cat ./library/header/util/ThreadScheduler.hpp | grep -v "^#" >> ./build/zeneural.hpp
-	cat ./library/header/util/numbers.hpp | grep -v "^#" >> ./build/zeneural.hpp
-	cat ./library/header/normalization.hpp | grep -v "^#" >> ./build/zeneural.hpp
-	cat ./library/header/Neuron.hpp | grep -v "^#" >> ./build/zeneural.hpp
-	cat ./library/header/Layer.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/includes.hpp >> ./build/zeneural.hpp
+	cat ./library/header/internals/util/assert.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/internals/util/ThreadScheduler.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/internals/util/numbers.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/internals/util/normalization.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/internals/Neuron.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/internals/Layer.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/NeuralNetwork.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/VanillaRecurrentNetwork.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	cat ./library/header/Perceptron.hpp | grep -v "^#" >> ./build/zeneural.hpp
-	cat ./library/header/typedefs.hpp | grep -v "^#" >> ./build/zeneural.hpp
+	cat ./library/header/internals/typedefs.hpp | grep -v "^#" >> ./build/zeneural.hpp
 	echo "#endif" >> ./build/zeneural.hpp
 
 install: compile_header

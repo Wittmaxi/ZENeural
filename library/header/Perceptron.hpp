@@ -7,8 +7,8 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 */
 
 #pragma once
-#include "Neuron.hpp"
-#include "normalization.hpp"
+#include "internals/Neuron.hpp"
+#include "internals/util/normalization.hpp"
 
 namespace ZNN {
 template<class floatType>

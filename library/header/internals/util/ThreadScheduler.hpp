@@ -47,13 +47,13 @@ class Function : public FunctionBase
     bind_type bind_;
 };
 
-void execLoop(bool* exit, std::queue<std::unique_ptr<FunctionBase>>* fun)
+void execLoop(bool* exit, std::queue<std::unique_ptr<FunctionBase>>* functions)
 {
     while (!*exit)
-        if (!fun->empty())
+        if (!functions->empty())
         {
-            fun->front()->callFunction();
-            fun->pop();
+            functions->front()->callFunction();
+            functions->pop();
         }
 }
 

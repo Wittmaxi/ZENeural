@@ -7,9 +7,9 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 */
 
 #pragma once
-#include "includes.h"
+#include "../includes.hpp"
 #include "util/assert.hpp"
-#include "normalization.hpp"
+#include "util/normalization.hpp"
 #include "Neuron.hpp"
 #include "util/ThreadScheduler.hpp"
 
@@ -79,8 +79,9 @@ template <class floatType>
 std::string Layer<floatType>::getAsString() const
 {
 	std::string temp;
-	for (const auto &i : neurons)
+	for (const auto &i : neurons) {
 		temp += i.getAsString() + "]";
+	}
 	return temp;
 }
 
@@ -134,8 +135,12 @@ template <class floatType>
 void Layer<floatType>::changeWeights()
 {
 	for (size_t i = 0; i < this->size; i++)
-		for (size_t j = 0; j < this->inputSize; j++)
+		for (size_t j = 0; j < this->inputSize; j++) {
 			this->neurons[i].weights[j] -= this->learningRate * this->layerInputValues[j] * this->derivatives[i];
+			if (std::abs(this->neurons[i].weights[j]) > 20000) {
+				this->neurons[i].weights[j] += this->learningRate * this->layerInputValues[j] * this->derivatives[i];
+			}
+		}
 }
 
 //

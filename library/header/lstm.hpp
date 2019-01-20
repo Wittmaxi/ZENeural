@@ -11,7 +11,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 namespace ZNN {
 template<class floatType>
-class VanillaRecurrentNeuralNetwork {
+class LongShortTermMemoryNetwork {
 
 }
 }

@@ -8,10 +8,10 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 
 #pragma once
 
-#include "includes.h"
-#include "Layer.hpp"
-#include "normalization.hpp"
-#include "util/assert.hpp"
+#include "includes.hpp"
+#include "internals/Layer.hpp"
+#include "internals/util/normalization.hpp"
+#include "internals/util/assert.hpp"
 
 namespace ZNN
 {
@@ -52,7 +52,7 @@ template <class floatType>
 void FeedForwardNeuralNetwork<floatType>::setInputLayerSize(unsigned int size)
 {
 	UTIL::assert(inputLayerSize != 0, "You cannot set the size of the Input layer twice");
-	UTIL::assert(size == 0, "You cannot set an input layer's size to a value smaler than 1");
+	UTIL::assert(size < 0, "You cannot set an input layer's size to a value smaller than 1");
 
 	inputLayerSize = size;
 }
@@ -182,7 +182,6 @@ void FeedForwardNeuralNetwork<floatType>::loadFromString(const std::string& stri
 		if (i == '}') {
 			HiddenLayer<floatType> templ(0, 0);
 			templ.loadFromString(temp);
-			inputLayerSize = templ.neurons.size();
 			layers.push_back(templ);
 			temp = "";
 		} else if (i == '>') {
