@@ -14,7 +14,7 @@ To install it to /usr/include, run
 
 `sudo make install`
 
-In the main directory
+In the main directory. When compiling, add the -lpthread flag!
 
 ## Long-Term use
 The entire library will be kept backwards compatible, code quality will be ensured.
