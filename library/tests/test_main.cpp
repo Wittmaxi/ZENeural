@@ -9,7 +9,7 @@ https://github.com/Wittmaxi/ZENeural/blob/master/LICENSE
 #define CATCH_CONFIG_MAIN
 #include "../header/NeuralNetwork.hpp"
 #include "../header/internals/Layer.hpp"
-#include "../header/internals/GatedNeuron.hpp"
+#include "../header/internals/LSTMUnit.hpp"
 #include "../header/VanillaRecurrentNetwork.hpp"
 #include "../header/Perceptron.hpp"
 #include "../header/internals/typedefs.hpp"
